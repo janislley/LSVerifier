@@ -22,8 +22,11 @@ Following parameter could be used:
 `-ib` - Enable Incremental BMC;  
 `-p` - Enable No Pointer Check;  
 `-o` - Enable Overflow Check;  
+`-k` - Enable k-induction parallel;  
 `-i` - "Path to the file that describe the libraries dependecies. Each line must contain a library dependency path. Refer to a `dep.txt` as example". Ex `-i dep.txt`;  
-`-k` - Enable K Induction;  
+`-t` - Enable ESBMC timeout in second;  
+`-f` - Enable Verification by function;  
+`-w` - Enable Witness Output. It makes ESBMC generate graphML;  
 `-h` - Shows help;  
 
 An usage example:
