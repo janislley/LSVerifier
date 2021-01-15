@@ -8,6 +8,7 @@ import shlex
 import sys
 import os
 import sys
+import logging 
 
 CTAGS = "ctags"
 CTAGS_TAB = "-x"
@@ -24,6 +25,8 @@ INC_BMC = "--incremental-bmc"
 K_INDUCTION = "--k-induction-parallel"
 WITNESS = "--witness-output"
 TIMEOUT = "--timeout"
+CLAIM = "--claim"
+CLAIMS_VERIFY = "--claims"
 DIRECTORY = "output"
 
 def get_command_line(args):
@@ -51,7 +54,17 @@ def get_command_line(args):
         cmd_line += OVERFLOW + " "
 
     if args.k_induction_parallel:
-        cmd_line += K_INDUCTION
+        cmd_line += K_INDUCTION + " "
+
+    if args.esbmc_parameter:
+        para = args.esbmc_parameter
+        para = para.split(" ")
+        for i in range(len(para)):
+            cmd_line += para[i] + " "
+
+    # It should be the lastest parameter
+    if args.claims:
+        cmd_line += CLAIM + " "
 
     return(cmd_line)
 
@@ -100,11 +113,36 @@ def create_dir(name):
         os.mkdir(name)
     except FileExistsError:
         print("Directory ", name, " already exists.")
-        sys.exit()
+
+def run(cmd):
+    claim = 0
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, text=True)
+    
+    while True:
+        out = proc.stdout.readline()
+        if out == '' and proc.poll() is not None:
+            break
+        if out:
+            logging.info(out.strip())
+
+        if "--show-claims" in cmd:
+            if "Claim" in out:
+                    claim += 1
+    return(claim)
+
+def verify_claims(cmd):
+    count_claims = cmd[:-1] + ["--show-claims"]
+    
+    claim = run(count_claims)
+
+    for i in range(claim):
+        run(cmd + [str(i)])
 
 def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
     # Print file that will be checked
-    print("[FILE] ",c_file)
+    logging.info("[FILE] %s", c_file)
+
+    esbmc_args = []
 
     if not func:
         func_list = ["main"]
@@ -112,25 +150,23 @@ def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
         # Get all function of c_file
         func_list = list_functions(c_file)
         esbmc_args = shlex.split(cmd_line);
-        
 
     # Run ESBMC on each function of each file found
     for item in func_list:
-        print("[FUNCTION] ",item, "\n") 
+        logging.info("[FUNCTION] %s", item) 
 
-        output = subprocess.Popen([ESBMC, c_file] + 
-            ([] if not func else [FUNCTION, item]) +
-            ([] if not witness else [WITNESS, DIRECTORY + "/" + "graphML_" + item]) +
-            esbmc_args + 
-            dep_list,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True)
+        cmd = ([ESBMC, c_file] +
+                ([] if not func else [FUNCTION, item]) +
+                ([] if not witness else [WITNESS, DIRECTORY + "/" + "graphML_" + item]) +
+                dep_list +
+                esbmc_args)
 
-        (stdout, stderr) = output.communicate()
-
-        print(stdout)
-        print(stderr)
+        if CLAIM in cmd_line:
+            verify_claims(cmd)
+        else:
+            run(cmd)
+        
+        logging.info("\n")
 
 def list_c_files():
     return(glob.glob("*.c"))
@@ -149,24 +185,32 @@ def main():
     parser.add_argument("-t", TIMEOUT, help="Set timeout in second")
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
     parser.add_argument("-w", WITNESS, help="Enable Witness Output", action="store_true", default=False)
+    parser.add_argument("-c", CLAIMS_VERIFY, help="Enable Claims Verify", action="store_true", default=False)
+    parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
+    parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
     args = parser.parse_args()
-    
+
     create_dir(DIRECTORY)
+
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    if args.verbose:
+        stdout_handler = logging.StreamHandler(sys.stdout)
+        logger.addHandler(stdout_handler)
+
+    file_handler = logging.FileHandler("output/output.log")
+    logger.addHandler(file_handler)
     
     print("ESBMC Running...", flush=True)
-    
-    # Init log file
-    old_stdout = sys.stdout
-    log_file = open(os.path.join(DIRECTORY, "output.log"),"w")
-    sys.stdout = log_file
 
     # Format ESBMC arguments
     cmd_line = get_command_line(args)
-    print("ESBMC Command Line: ", cmd_line)
+    logging.info("ESBMC Command Line: %s", cmd_line)
 
     # Read Libraries Dependencies File
     if args.libraries:
-        print("Dependecies File: ", args.libraries, "\n")
+        logging.info("Dependecies File: %s", args.libraries)
         dep_list = read_dep_file(args.libraries)
     else:
         dep_list = []
@@ -174,7 +218,10 @@ def main():
     # Get c files on the folder
     all_c_files = list_c_files()
     if not len(all_c_files):
-        print("There is not .c file here!!", flush=True) 
+        logging.error("There is not .c file here!!") 
+        sys.exit()
+
+    start_all = time.time()
 
     # Run ESBMC on each file found
     for c_file in all_c_files:
@@ -184,11 +231,10 @@ def main():
 
         elapsed = (time.time() - start)
 
-        print("\n[FILE]: ",c_file," [TIME]: ",elapsed)  
+        logging.info("[FILE]: %s [TIME]: %s", c_file, elapsed)  
 
-    # Close log
-    sys.stdout = old_stdout
-    log_file.close()
+    elapsed_all = (time.time() - start_all)
+    logging.info("[OVERALL TIME]: %s", elapsed_all)  
 
     # Run csvwr to export output to a spreadsheet
     import csvwr
