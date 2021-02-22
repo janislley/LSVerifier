@@ -139,8 +139,6 @@ def verify_claims(cmd):
         run(cmd + [str(i)])
 
 def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
-    # Print file that will be checked
-    logging.info("[FILE] %s", c_file)
 
     esbmc_args = []
 
@@ -149,11 +147,17 @@ def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
     else:
         # Get all function of c_file
         func_list = list_functions(c_file)
-        esbmc_args = shlex.split(cmd_line);
+
+    esbmc_args = shlex.split(cmd_line);
 
     # Run ESBMC on each function of each file found
     for item in func_list:
+        # Print file that will be checked
+        logging.info("########################################")
+        logging.info("[FILE] %s", c_file)
+        logging.info("[ARGS] %s", esbmc_args)
         logging.info("[FUNCTION] %s", item) 
+        logging.info("########################################\n")
 
         cmd = ([ESBMC, c_file] +
                 ([] if not func else [FUNCTION, item]) +
@@ -166,7 +170,7 @@ def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
         else:
             run(cmd)
         
-        logging.info("\n")
+        logging.info("")
 
 def list_c_files():
     return(glob.glob("*.c"))
@@ -206,7 +210,6 @@ def main():
 
     # Format ESBMC arguments
     cmd_line = get_command_line(args)
-    logging.info("ESBMC Command Line: %s", cmd_line)
 
     # Read Libraries Dependencies File
     if args.libraries:
@@ -231,7 +234,9 @@ def main():
 
         elapsed = (time.time() - start)
 
+        logging.info("########################################")
         logging.info("[FILE]: %s [TIME]: %s", c_file, elapsed)  
+        logging.info("########################################\n")
 
     elapsed_all = (time.time() - start_all)
     logging.info("[OVERALL TIME]: %s", elapsed_all)  
