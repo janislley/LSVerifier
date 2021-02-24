@@ -4,15 +4,11 @@ import subprocess
 import logging 
 import re
 
-CTAGS = "ctags"
-FRAMA = "frama-c"
-RTE =   "-rte"
-PRINT = "-print"
-THEN =  "-then"
-OCODE = "-ocode" 
-ACSL_OUT = "acsl_"
+FILE = "file"
+LINE = "line"
+FUNCTION = "function"
 
-def search(fname, string):
+def search_in_file(fname, string):
     pattern = re.compile(string)
     line_number = 0
     lines = []
@@ -24,14 +20,44 @@ def search(fname, string):
     
     return lines
 
+def read_lines(fname, lines):
+    """docstring for read_lines"""
+    line_content = []
+    with open(fname) as f:
+        for pos, line in enumerate(f):
+            if pos in lines:
+                line_content.append(line.strip())
+
+    return line_content
+
+def counter_to_dict(location, prop):
+    """docstring for dict_counter"""
+    list_dict = []
+    counters = {}
+    for i in location:
+        counters[FILE] = i.split()[1]
+        counters[LINE] = i.split()[3]
+        counters[FUNCTION] = i.split()[5]
+
+        list_dict.append(counters)
+
+    print(list_dict)
+
 def main():
     
     print("Running...")
     
     fname = "output/output.log"
-    string = "VERIFICATION FAILED"
+    string = "Counterexample"
 
-    print(search(fname, string))
+    counter = search_in_file(fname, string)
+
+    counter = [n+4 for n in counter]
+
+    lines = read_lines(fname, counter)
+
+    counter_to_dict(lines, 1)
+
 
 if __name__ == "__main__":
     main()
