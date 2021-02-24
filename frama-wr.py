@@ -2,6 +2,7 @@
 
 import subprocess
 import logging 
+import re
 
 CTAGS = "ctags"
 FRAMA = "frama-c"
@@ -11,24 +12,26 @@ THEN =  "-then"
 OCODE = "-ocode" 
 ACSL_OUT = "acsl_"
 
-def run(cmd):
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, text=True)
-    
-    while True:
-        out = proc.stdout.readline()
-        if out == '' and proc.poll() is not None:
-            break
-        if out:
-            print(out.strip())
+def search(fname, string):
+    pattern = re.compile(string)
+    line_number = 0
+    lines = []
 
-def generate_ACSL(cfile):
-    run([FRAMA, RTE, cfile, PRINT, THEN, OCODE, ACSL_OUT+cfile])
+    for line in open(fname):
+        line_number += 1
+        for match in re.finditer(pattern, line):
+            lines.append(line_number)
+    
+    return lines
 
 def main():
     
     print("Running...")
     
-    generate_ACSL("main.c")
+    fname = "output/output.log"
+    string = "VERIFICATION FAILED"
+
+    print(search(fname, string))
 
 if __name__ == "__main__":
     main()
