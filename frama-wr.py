@@ -4,10 +4,13 @@ import subprocess
 import logging 
 import re
 
+LOG_LINE = "log_line"
 FILE = "file"
 LINE = "line"
 FUNCTION = "function"
 PROPERTY = "property"
+DIV_BY_ZERO = "division by zero"
+FRAMA_C = "#ifdef __FRAMAC__\n\tFRAMA_C_show_each_{}({});\n#endif\n"
 
 def search_in_file(fname, string):
     pattern = re.compile(string)
@@ -31,14 +34,15 @@ def read_lines(fname, lines):
 
     return line_content
 
-def counter_to_dict(line, prop):
+def counter_to_dict(cex_line, cex, prop):
     """docstring for dict_counter"""
     list_dict = []
-    for i, j in zip(line, prop):
+    for x, i, j in zip(cex_line, cex, prop):
         if not (len(i) == 0):
             counters = {}
+            counters[LOG_LINE] = x
             counters[FILE] = i.split()[1]
-            counters[LINE] = i.split()[3]
+            counters[LINE] = int(i.split()[3])
             counters[FUNCTION] = i.split()[5]
             counters[PROPERTY] = j.strip()
 
@@ -46,6 +50,24 @@ def counter_to_dict(line, prop):
 
     return list_dict
 
+def cex_handler(cex):
+    """docstring for cex_handler"""
+    if DIV_BY_ZERO in cex.values():
+        variable_line = read_lines("output/output.log",[cex[LOG_LINE]+1])
+        variable = variable_line[0][0]
+        insert = FRAMA_C.format("lib_div", variable)
+
+        insert_file(insert, cex[FILE], cex[LINE])
+
+def insert_file(insert, fname, line):
+    """docstring for insert_file"""
+    with open(fname, "r+") as f:
+        list_lines = f.readlines()
+        list_lines.insert(line-1, insert)
+        f.seek(0)
+        f.writelines(list_lines)
+    print("File changed")
+         
 def main():
     print("Running...")
     
@@ -55,12 +77,13 @@ def main():
     cex_location_line = search_in_file(fname, string)
     cex_location = read_lines(fname, cex_location_line)
     
-    cex_line = [n+1 for n in cex_location_line]
-    cex = read_lines(fname, cex_line)
+    prop_line = [n+1 for n in cex_location_line]
+    prop = read_lines(fname, prop_line)
 
-    cex_dict = counter_to_dict(cex_location, cex)
-    print(cex_dict)
+    cex_dict = counter_to_dict(prop_line, cex_location, prop)
 
+    for n in cex_dict:
+        cex_handler(n)
 
 if __name__ == "__main__":
     main()
