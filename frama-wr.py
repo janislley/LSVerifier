@@ -30,33 +30,33 @@ def read_lines(fname, lines):
 
     return line_content
 
-def counter_to_dict(location, prop):
+def counter_to_dict(line, prop):
     """docstring for dict_counter"""
     list_dict = []
-    counters = {}
-    for i in location:
-        counters[FILE] = i.split()[1]
-        counters[LINE] = i.split()[3]
-        counters[FUNCTION] = i.split()[5]
+    for i in line:
+        if not (len(i) == 0):
+            counters = {}
+            counters[FILE] = i.split()[1]
+            counters[LINE] = i.split()[3]
+            counters[FUNCTION] = i.split()[5]
 
-        list_dict.append(counters)
+            list_dict.append(counters)
 
     print(list_dict)
 
 def main():
-    
     print("Running...")
     
     fname = "output/output.log"
-    string = "Counterexample"
+    string = "Violated property"
 
-    counter = search_in_file(fname, string)
+    cex_line = search_in_file(fname, string)
+    print(cex_line)
 
-    counter = [n+4 for n in counter]
+    cex = read_lines(fname, cex_line)
+    print(cex)
 
-    lines = read_lines(fname, counter)
-
-    counter_to_dict(lines, 1)
+    counter_to_dict(cex, 1)
 
 
 if __name__ == "__main__":
