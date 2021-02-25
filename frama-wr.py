@@ -3,6 +3,9 @@
 import subprocess
 import logging 
 import re
+import shell
+import shlex
+import glob
 
 LOG_LINE = "log_line"
 FILE = "file"
@@ -10,7 +13,9 @@ LINE = "line"
 FUNCTION = "function"
 PROPERTY = "property"
 DIV_BY_ZERO = "division by zero"
-FRAMA_C = "#ifdef __FRAMAC__\n\tFRAMA_C_show_each_{}({});\n#endif\n"
+FRAMA_C = "#ifdef __FRAMAC__\n\tFrama_C_show_each_{}({});\n#endif\n"
+FRAMA_EVA = "frama-c -eva"
+FRAMA_LOG = "output/frama.log"
 
 def search_in_file(fname, string):
     pattern = re.compile(string)
@@ -67,6 +72,14 @@ def insert_file(insert, fname, line):
         f.seek(0)
         f.writelines(list_lines)
     print("File changed")
+
+def run_frama(files):
+    """docstring for run_frama"""
+    cmd = shlex.split(FRAMA_EVA) + files
+    with open(FRAMA_LOG, "w") as f:
+        f.write(shell.run(cmd))
+    print("Frama Log created")
+    
          
 def main():
     print("Running...")
@@ -84,6 +97,9 @@ def main():
 
     for n in cex_dict:
         cex_handler(n)
+
+    c_files =  glob.glob("*.c")
+    run_frama(c_files)
 
 if __name__ == "__main__":
     main()
