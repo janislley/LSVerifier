@@ -6,6 +6,7 @@ import re
 import shell
 import shlex
 import glob
+import instrumenter
 
 LOG_LINE = "log_line"
 FILE = "file"
@@ -60,6 +61,7 @@ def cex_handler(cex):
     if DIV_BY_ZERO in cex.values():
         variable_line = read_lines("output/output.log",[cex[LOG_LINE]+1])
         variable = variable_line[0][0]
+        """ TODO fix format """
         insert = FRAMA_C.format("lib_div", variable)
 
         insert_file(insert, cex[FILE], cex[LINE])
@@ -71,7 +73,7 @@ def insert_file(insert, fname, line):
         list_lines.insert(line-1, insert)
         f.seek(0)
         f.writelines(list_lines)
-    print("File changed")
+    print("Framac function inserted")
 
 def run_frama(files):
     """docstring for run_frama"""
@@ -79,27 +81,64 @@ def run_frama(files):
     with open(FRAMA_LOG, "w") as f:
         f.write(shell.run(cmd))
     print("Frama Log created")
+
+def get_framac_output(cex):
+    """docstring for get_framac_output"""
+    if DIV_BY_ZERO in cex.values():
+        framac_string = "Frama_C_show_each_{}".format(cex[FUNCTION])
+        lines = search_in_file(FRAMA_LOG, framac_string)
+        
+        lines = [n-1 for n in lines]
+        line_content = read_lines(FRAMA_LOG, lines)
+
+        list_output = []
+        for n in line_content:
+            result = re.search(r"\{([0-9]+)\}", n)
+
+            list_output.append(int(result.group(1)))
+
+        return list_output
     
-         
 def main():
     print("Running...")
     
     fname = "output/output.log"
     string = "Violated property"
 
+    # Find lines where "Violated property" is found
     cex_location_line = search_in_file(fname, string)
+    # Read those lines
     cex_location = read_lines(fname, cex_location_line)
     
+    # Increment Line to find the property
     prop_line = [n+1 for n in cex_location_line]
+    # Read those line
     prop = read_lines(fname, prop_line)
 
+    # Get all information about the counterexample and create a dictionary
     cex_dict = counter_to_dict(prop_line, cex_location, prop)
 
+    # Check each counterexample type and insert in the code
     for n in cex_dict:
         cex_handler(n)
 
+    # Get all .c file and run Frama-c
     c_files =  glob.glob("*.c")
     run_frama(c_files)
+    
+    for n in cex_dict:
+        framac_value = get_framac_output(n)
+
+        if DIV_BY_ZERO in n.values():
+            variable_line = read_lines("output/output.log",[n[LOG_LINE]+1])
+            variable = variable_line[0][0]
+
+
+            map = ({n[LINE]:[variable,framac_value]})
+            print(map)
+
+            instrumenter.instrument_code(n[FILE], map)
+
 
 if __name__ == "__main__":
     main()
