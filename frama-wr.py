@@ -17,6 +17,9 @@ DIV_BY_ZERO = "division by zero"
 FRAMA_C = "#ifdef __FRAMAC__\n\tFrama_C_show_each_{}({});\n#endif\n"
 FRAMA_EVA = "frama-c -eva"
 FRAMA_LOG = "output/frama.log"
+PATTERN_FILE = "file (.*?) line "
+PATTERN_LINE = "line (.*?) function"
+PATTERN_FUNC = "function (.*?)$"
 
 def search_in_file(fname, string):
     pattern = re.compile(string)
@@ -47,9 +50,9 @@ def counter_to_dict(cex_line, cex, prop):
         if not (len(i) == 0):
             counters = {}
             counters[LOG_LINE] = x
-            counters[FILE] = i.split()[1]
-            counters[LINE] = int(i.split()[3])
-            counters[FUNCTION] = i.split()[5]
+            counters[FILE] = re.search(PATTERN_FILE,i).group(1).strip()
+            counters[LINE] = int(re.search(PATTERN_LINE,i).group(1).strip())
+            counters[FUNCTION] = re.search(PATTERN_FUNC,i).group(1).strip()
             counters[PROPERTY] = j.strip()
 
             list_dict.append(counters)
