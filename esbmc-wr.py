@@ -108,18 +108,30 @@ def create_dir(name):
     except FileExistsError:
         print("Directory ", name, " already exists.")
 
+#def run(cmd):
+#    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+#    
+#    while True:
+#        out = proc.stdout.readline()
+#        # err = proc.stderr.readline()
+#        if out == '' and proc.poll() is not None:
+#            break
+#        if out:
+#            logging.info(out.strip())
+#        #if err:
+#        #    logging.info(err.strip())
+
 def run(cmd):
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, text=True)
     
     while True:
         out = proc.stdout.readline()
-        err = proc.stderr.readline()
         if out == '' and proc.poll() is not None:
             break
         if out:
             logging.info(out.strip())
-        if err:
-            logging.info(err.strip())
+    rc = proc.poll()
+    return rc
 
 def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
     esbmc_args = []
