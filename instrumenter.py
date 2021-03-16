@@ -19,7 +19,7 @@ def list2code(lines, filename):
 
 # instrument code with assumes w.r.t. given invariants
 def instrument_code(filename, invariants):
-    print('Instrumenting source-code with given parameters')
+    # print('Instrumenting source-code with given parameters')
     line_numbers = set([line_number for line_number in invariants])
     lines = code2list(filename)
     instrumented = []
@@ -37,4 +37,4 @@ def instrument_code(filename, invariants):
     dirname = os.path.dirname(filename)
     output_filename = os.path.join(dirname, 'instrumented_' + basename)
     list2code(instrumented, output_filename)
-    print('Output file saved in {0}'.format(output_filename))
+    # print('Output file saved in {0}'.format(output_filename))

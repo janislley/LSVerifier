@@ -76,7 +76,7 @@ def insert_file(insert, fname, line):
         list_lines.insert(line-1, insert)
         f.seek(0)
         f.writelines(list_lines)
-    print("Framac function inserted")
+    print("["+fname+"] Framac function inserted")
 
 def run_frama(files):
     """docstring for run_frama"""
@@ -110,6 +110,9 @@ def main():
 
     # Find lines where "Violated property" is found
     cex_location_line = search_in_file(fname, string)
+    print(str(len(cex_location_line))+" Violations")
+    print("\nLog parsing...")
+
     # Read those lines
     cex_location = read_lines(fname, cex_location_line)
     
@@ -121,11 +124,13 @@ def main():
     # Get all information about the counterexample and create a dictionary
     cex_dict = counter_to_dict(prop_line, cex_location, prop)
 
-    # Check each counterexample type and insert in the code
+    # Check each counterexample type and insert Frama-c function
+    print("\n--- Frama-C Instrumentation ---")
     for n in cex_dict:
         cex_handler(n)
 
     # Get all .c file and run Frama-c
+    print("\n--- Running Frama-C ---")
     c_files =  glob.glob("*.c")
     run_frama(c_files)
     
@@ -138,9 +143,10 @@ def main():
 
 
             map = ({n[LINE]:[variable,framac_value]})
-            print(map)
 
             instrumenter.instrument_code(n[FILE], map)
+    
+    print("\nDone!")
 
 
 if __name__ == "__main__":
