@@ -64,8 +64,7 @@ def cex_handler(cex):
     if DIV_BY_ZERO in cex.values():
         variable_line = read_lines("output/output.log",[cex[LOG_LINE]+1])
         variable = variable_line[0][0]
-        """ TODO fix format """
-        insert = FRAMA_C.format("lib_div", variable)
+        insert = FRAMA_C.format(cex["function"], variable)
 
         insert_file(insert, cex[FILE], cex[LINE])
 
