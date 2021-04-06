@@ -1,0 +1,3 @@
+fileName,functionVerified,functionName,functionLine,status,error
+ lib.c, lib_div, lib_div , 5 ,Failed,division by zero
+ main.c, psum, psum , 19 ,Failed,dereference failure: invalid pointer
