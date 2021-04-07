@@ -20,6 +20,18 @@ DIRECTORY = "output"
 
 print("Saving Output...")
 
+def create_csv():
+    with open(os.path.join(DIRECTORY,'output.csv'), mode='w') as csv_file:
+        fieldnames = ['fileName', 
+                'functionVerified', 
+                'functionName', 
+                'functionLine', 
+                'status', 
+                'error']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames, lineterminator = '\n')
+        writer.writeheader()
+    csv_file.close()
+
 with open(os.path.join(DIRECTORY,'output.csv'), mode='w') as csv_file:
     fieldnames = ['fileName', 'functionVerified', 'functionName', 'functionLine', 'status', 'error']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames, lineterminator = '\n')
