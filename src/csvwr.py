@@ -25,7 +25,6 @@ def create_csv():
                 'functionVerified', 
                 'functionName', 
                 'functionLine', 
-                'status', 
                 'error']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames, lineterminator = '\n')
         writer.writeheader()
@@ -33,11 +32,9 @@ def create_csv():
 
 def search_duplicate(file_name, function_name, line):
     with open(os.path.join(DIRECTORY,'output.csv'), mode='r') as csv_file:
-        print(file_name, function_name, line)
         for row in csv.reader(csv_file):
             if(file_name and function_name and line in row):
                 csv_file.close()
-                print("achou")
                 return True;
 
 def search_cex():
@@ -89,7 +86,6 @@ def search_cex():
 
 create_csv()
 cex_list = search_cex()
-print(cex_list)
 for cex in cex_list:
     if(not search_duplicate(cex[0], cex[2], cex[3])):
         with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:
