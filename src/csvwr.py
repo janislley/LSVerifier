@@ -32,6 +32,15 @@ def create_csv():
         writer.writeheader()
     csv_file.close()
 
+def search_duplicate(file_name, function_name, line):
+    with open(os.path.join(DIRECTORY,'output.csv'), mode='r') as csv_file:
+        print(csv_file)
+        for row in csv.reader(csv_file):
+            if(file_name and function_name and line in row):
+                csv_file.close()
+                print("achou")
+                return True;
+
 with open(os.path.join(DIRECTORY,'output.csv'), mode='w') as csv_file:
     fieldnames = ['fileName', 'functionVerified', 'functionName', 'functionLine', 'status', 'error']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames, lineterminator = '\n')
