@@ -40,8 +40,6 @@ def search_duplicate(file_name, function_name, line):
                 print("achou")
                 return True;
 
-create_csv()
-
 def search_cex():
     hasFailed = False
     cex_list = []
@@ -88,20 +86,9 @@ def search_cex():
                             cex_list.append([fileName, funcVeri, functionName, functionLine, errorName])
     return cex_list
 
+create_csv()
 cex_list = search_cex()
 for cex in cex_list:
-    if(functionName != '' or errorName != ''):
-        with open(os.path.join(DIRECTORY,'output.csv'), mode='w') as csv_file:
-            fieldnames = ['fileName', 
-                    'functionVerified', 
-                    'functionName', 
-                    'functionLine', 
-                    'status', 
-                    'error']
-            writer = csv.DictWriter(csv_file, fieldnames=fieldnames, lineterminator = '\n')
-            writer.writerow({'fileName': cex[0], 
-                'functionVerified': cex[1], 
-                'functionName': cex[2], 
-                'functionLine': cex[3], 
-                'status' : 'Failed', 
-                'error' : cex[4]})
+    with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(cex)
