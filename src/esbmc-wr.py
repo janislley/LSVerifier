@@ -9,6 +9,7 @@ import sys
 import os
 import sys
 import logging 
+import csvwr
 
 CTAGS = "ctags"
 CTAGS_TAB = "-x"
@@ -232,7 +233,7 @@ def main():
     logging.info("[OVERALL TIME]: %s", elapsed_all)  
 
     # Run csvwr to export output to a spreadsheet
-    import csvwr
+    csvwr.export_cex()
     print("Done!", flush=True)
 
 if __name__ == "__main__":

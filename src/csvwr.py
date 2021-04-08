@@ -84,10 +84,11 @@ def search_cex():
                             cex_list.append([fileName, funcVeri, functionName, functionLine, errorName])
     return cex_list
 
-create_csv()
-cex_list = search_cex()
-for cex in cex_list:
-    if(not search_duplicate(cex[0], cex[2], cex[3])):
-        with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:
-            writer = csv.writer(csv_file)
-            writer.writerow(cex)
+def export_cex():
+    create_csv()
+    cex_list = search_cex()
+    for cex in cex_list:
+        if(not search_duplicate(cex[0], cex[2], cex[3])):
+            with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(cex)
