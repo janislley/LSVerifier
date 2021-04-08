@@ -33,7 +33,7 @@ def create_csv():
 
 def search_duplicate(file_name, function_name, line):
     with open(os.path.join(DIRECTORY,'output.csv'), mode='r') as csv_file:
-        print(csv_file)
+        print(file_name, function_name, line)
         for row in csv.reader(csv_file):
             if(file_name and function_name and line in row):
                 csv_file.close()
@@ -83,12 +83,15 @@ def search_cex():
                         match = re.search(errorPattern, newLine, re.IGNORECASE)
                         if(match):
                             errorName = lines[i + j + 2].rstrip()
+
                             cex_list.append([fileName, funcVeri, functionName, functionLine, errorName])
     return cex_list
 
 create_csv()
 cex_list = search_cex()
+print(cex_list)
 for cex in cex_list:
-    with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writerow(cex)
+    if(not search_duplicate(cex[0], cex[2], cex[3])):
+        with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(cex)
