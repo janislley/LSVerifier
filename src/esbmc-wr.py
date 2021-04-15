@@ -26,6 +26,7 @@ INC_BMC = "--incremental-bmc"
 K_INDUCTION = "--k-induction-parallel"
 WITNESS = "--witness-output"
 TIMEOUT = "--timeout"
+MALLOC_SUC = "--force-malloc-success"
 DIRECTORY = "output"
 
 def get_command_line(args):
@@ -108,19 +109,6 @@ def create_dir(name):
         os.mkdir(name)
     except FileExistsError:
         print("Directory ", name, " already exists.")
-
-#def run(cmd):
-#    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-#    
-#    while True:
-#        out = proc.stdout.readline()
-#        # err = proc.stderr.readline()
-#        if out == '' and proc.poll() is not None:
-#            break
-#        if out:
-#            logging.info(out.strip())
-#        #if err:
-#        #    logging.info(err.strip())
 
 def run(cmd):
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, text=True)
