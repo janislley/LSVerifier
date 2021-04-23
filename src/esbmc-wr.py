@@ -28,6 +28,7 @@ WITNESS = "--witness-output"
 TIMEOUT = "--timeout"
 MALLOC_SUC = "--force-malloc-success"
 DIRECTORY = "output"
+POINTER_FAIL = "invalid pointer"
 
 def get_command_line(args):
     cmd_line = ""
@@ -111,6 +112,7 @@ def create_dir(name):
         print("Directory ", name, " already exists.")
 
 def run(cmd):
+    invalid_pointer = 0
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, text=True)
     
     while True:
@@ -119,8 +121,9 @@ def run(cmd):
             break
         if out:
             logging.info(out.strip())
-    rc = proc.poll()
-    return rc
+            if POINTER_FAIL in out.strip():
+                invalid_pointer = 1
+    return invalid_pointer
 
 def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
     esbmc_args = []
@@ -148,8 +151,23 @@ def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
                 dep_list +
                 esbmc_args)
 
-        run(cmd)
+        fail = run(cmd)
         
+        #If the last verification failed in invalid pointer, retest with "--no-pointer-check"
+        if fail:
+            cmd.append(NO_POINTER)
+
+            # Print file that will be checked
+            logging.info("")
+            logging.info("########################################")
+            logging.info("*****RETEST*****")
+            logging.info("[FILE] %s", c_file)
+            logging.info("[ARGS] %s", esbmc_args)
+            logging.info("[FUNCTION] %s", item) 
+            logging.info("########################################\n")
+
+            run(cmd)
+
         logging.info("")
 
 def list_c_files():
