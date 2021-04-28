@@ -125,10 +125,10 @@ def run(cmd):
                 invalid_pointer = 1
     return invalid_pointer
 
-def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
+def run_esbmc(c_file, cmd_line, dep_list, args):
     esbmc_args = []
 
-    if not func:
+    if not args.functions:
         func_list = ["main"]
     else:
         # Get all function of c_file
@@ -146,8 +146,8 @@ def run_esbmc(c_file, cmd_line, dep_list, time, func, witness):
         logging.info("########################################\n")
 
         cmd = ([ESBMC, c_file] +
-                ([] if not func else [FUNCTION, item]) +
-                ([] if not witness else [WITNESS, DIRECTORY + "/" + "graphML_" + item]) +
+                ([] if not args.functions else [FUNCTION, item]) +
+                ([] if not args.witness_output else [WITNESS, DIRECTORY + "/" + "graphML_" + item]) +
                 dep_list +
                 esbmc_args)
 
@@ -227,7 +227,7 @@ def main():
     for c_file in all_c_files:
         start = time.time()
         
-        run_esbmc(c_file, cmd_line, dep_list, args.timeout, args.functions, args.witness_output)
+        run_esbmc(c_file, cmd_line, dep_list, args)
 
         elapsed = (time.time() - start)
 
