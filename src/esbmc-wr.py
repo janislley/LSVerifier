@@ -154,19 +154,20 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
         fail = run(cmd)
         
         #If the last verification failed in invalid pointer, retest with "--no-pointer-check"
-        if fail:
-            cmd.append(NO_POINTER)
+        if args.retest_pointer:
+            if fail:
+                cmd.append(NO_POINTER)
 
-            # Print file that will be checked
-            logging.info("")
-            logging.info("########################################")
-            logging.info("*****RETEST*****")
-            logging.info("[FILE] %s", c_file)
-            logging.info("[ARGS] %s", esbmc_args)
-            logging.info("[FUNCTION] %s", item) 
-            logging.info("########################################\n")
+                # Print file that will be checked
+                logging.info("")
+                logging.info("########################################")
+                logging.info("*****RETEST*****")
+                logging.info("[FILE] %s", c_file)
+                logging.info("[ARGS] %s", esbmc_args)
+                logging.info("[FUNCTION] %s", item) 
+                logging.info("########################################\n")
 
-            run(cmd)
+                run(cmd)
 
         logging.info("")
 
@@ -189,6 +190,7 @@ def main():
     parser.add_argument("-w", WITNESS, help="Enable Witness Output", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
     parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
+    parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     args = parser.parse_args()
 
     create_dir(DIRECTORY)
