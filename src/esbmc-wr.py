@@ -172,7 +172,13 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
         logging.info("")
 
 def list_c_files():
-    return(glob.glob("*.c"))
+    file_list = glob.glob("*.c")
+
+    if not len(file_list):
+        logging.error("There is not .c file here!!") 
+        sys.exit()
+
+    return(file_list)
 
 def arguments():
     # Input Parse
@@ -228,9 +234,6 @@ def main():
 
     # Get c files on the folder
     all_c_files = list_c_files()
-    if not len(all_c_files):
-        logging.error("There is not .c file here!!") 
-        sys.exit()
 
     start_all = time.time()
 
