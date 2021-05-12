@@ -174,7 +174,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 def list_c_files():
     return(glob.glob("*.c"))
 
-def main():
+def arguments():
     # Input Parse
     parser = argparse.ArgumentParser("Input Options")
     parser.add_argument("-m", MEMORY_LEAK, help="Enable Memory Leak Check", action="store_true", default=False)
@@ -192,6 +192,12 @@ def main():
     parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     args = parser.parse_args()
+
+    return(args)
+
+def main():
+
+    args = arguments()
 
     create_dir(DIRECTORY)
 
