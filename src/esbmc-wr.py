@@ -195,23 +195,26 @@ def arguments():
 
     return(args)
 
-def main():
-
-    args = arguments()
-
+def configure_logs(verbose):
     create_dir(DIRECTORY)
 
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    if args.verbose:
+    if verbose:
         stdout_handler = logging.StreamHandler(sys.stdout)
         logger.addHandler(stdout_handler)
 
     file_handler = logging.FileHandler("output/output.log")
     logger.addHandler(file_handler)
-    
-    print("ESBMC Running...", flush=True)
+
+def main():
+
+    args = arguments()
+
+    configure_logs(args.verbose)
+
+    print("TESTE ESBMC Running...", flush=True)
 
     # Format ESBMC arguments
     cmd_line = get_command_line(args)
