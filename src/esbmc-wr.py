@@ -17,15 +17,7 @@ CTAGS_FUNC = "--c-types=f"
 
 ESBMC = "esbmc"
 FUNCTION = "--function"
-MEMORY_LEAK = "--memory-leak-check"
 NO_POINTER = "--no-pointer-check"
-OVERFLOW = "--overflow-check"
-UNWIND = "--unwind"
-UNWIND_NO = "--no-unwinding-assertions"
-INC_BMC = "--incremental-bmc"
-K_INDUCTION = "--k-induction-parallel"
-TIMEOUT = "--timeout"
-MALLOC_SUC = "--force-malloc-success"
 
 DIRECTORY = "output"
 POINTER_FAIL = "invalid pointer"
@@ -34,30 +26,6 @@ DEP = "-I"
 
 def get_command_line(args):
     cmd_line = ""
-
-    if args.memory_leak_check:
-        cmd_line += MEMORY_LEAK + " "
-
-    if args.unwind:
-        cmd_line += UNWIND + " " + args.unwind + " "
-
-    if args.timeout:
-        cmd_line += TIMEOUT + " " + args.timeout + "s" + " "
-
-    if args.no_unwinding_assertions:
-        cmd_line += UNWIND_NO + " "
-
-    if args.incremental_bmc:
-        cmd_line += INC_BMC + " "
-
-    if args.no_pointer_check:
-        cmd_line += NO_POINTER + " "
-
-    if args.overflow_check:
-        cmd_line += OVERFLOW + " "
-
-    if args.k_induction_parallel:
-        cmd_line += K_INDUCTION + " "
 
     if args.esbmc_parameter:
         para = args.esbmc_parameter
@@ -133,14 +101,11 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
     if not args.functions:
         func_list = ["main"]
     else:
-        # Get all function of c_file
         func_list = list_functions(c_file)
 
     esbmc_args = shlex.split(cmd_line);
 
-    # Run ESBMC on each function of each file found
     for item in func_list:
-        # Print file that will be checked
         logging.info("########################################")
         logging.info("[FILE] %s", c_file)
         logging.info("[ARGS] %s", esbmc_args)
@@ -154,12 +119,10 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
         fail = run(cmd)
 
-        #If the last verification failed in invalid pointer, retest with "--no-pointer-check"
         if args.retest_pointer:
             if fail:
                 cmd.append(NO_POINTER)
 
-                # Print file that will be checked
                 logging.info("")
                 logging.info("########################################")
                 logging.info("*****RETEST*****")
@@ -182,20 +145,11 @@ def list_c_files():
     return(file_list)
 
 def arguments():
-    # Input Parse
     parser = argparse.ArgumentParser("Input Options")
-    parser.add_argument("-m", MEMORY_LEAK, help="Enable Memory Leak Check", action="store_true", default=False)
-    parser.add_argument("-u", UNWIND, help="Enable Unwind")
-    parser.add_argument("-nu", UNWIND_NO, help="Enable No Unwind Assertions", action="store_true", default=False)
-    parser.add_argument("-ib", INC_BMC, help="Enable Incremental BMC", action="store_true", default=False)
-    parser.add_argument("-p", NO_POINTER, help="Enable No Pointer Check", action="store_true", default=False)
-    parser.add_argument("-o", OVERFLOW, help="Enable Overflow Check", action="store_true", default=False)
-    parser.add_argument("-k", K_INDUCTION, help="Enable K Induction", action="store_true", default=False)
+    parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
     parser.add_argument("-i", "--libraries", help="Path to the file that describe the libraries dependecies", default=False)
-    parser.add_argument("-t", TIMEOUT, help="Set timeout in second")
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
-    parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     args = parser.parse_args()
 
