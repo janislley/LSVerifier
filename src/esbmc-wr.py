@@ -24,7 +24,6 @@ UNWIND = "--unwind"
 UNWIND_NO = "--no-unwinding-assertions"
 INC_BMC = "--incremental-bmc"
 K_INDUCTION = "--k-induction-parallel"
-WITNESS = "--witness-output"
 TIMEOUT = "--timeout"
 MALLOC_SUC = "--force-malloc-success"
 
@@ -150,7 +149,6 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
         cmd = ([ESBMC, c_file] +
                 ([] if not args.functions else [FUNCTION, item]) +
-                ([] if not args.witness_output else [WITNESS, DIRECTORY + "/" + "graphML_" + item]) +
                 dep_list +
                 esbmc_args)
 
@@ -196,7 +194,6 @@ def arguments():
     parser.add_argument("-i", "--libraries", help="Path to the file that describe the libraries dependecies", default=False)
     parser.add_argument("-t", TIMEOUT, help="Set timeout in second")
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
-    parser.add_argument("-w", WITNESS, help="Enable Witness Output", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
     parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
