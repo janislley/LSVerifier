@@ -8,12 +8,13 @@ import shlex
 import sys
 import os
 import sys
-import logging 
+import logging
 import csvwr
 
 CTAGS = "ctags"
 CTAGS_TAB = "-x"
 CTAGS_FUNC = "--c-types=f"
+
 ESBMC = "esbmc"
 FUNCTION = "--function"
 MEMORY_LEAK = "--memory-leak-check"
@@ -21,14 +22,16 @@ NO_POINTER = "--no-pointer-check"
 OVERFLOW = "--overflow-check"
 UNWIND = "--unwind"
 UNWIND_NO = "--no-unwinding-assertions"
-DEP = "-I"
 INC_BMC = "--incremental-bmc"
 K_INDUCTION = "--k-induction-parallel"
 WITNESS = "--witness-output"
 TIMEOUT = "--timeout"
 MALLOC_SUC = "--force-malloc-success"
+
 DIRECTORY = "output"
 POINTER_FAIL = "invalid pointer"
+
+DEP = "-I"
 
 def get_command_line(args):
     cmd_line = ""
@@ -81,13 +84,13 @@ def list_functions(c_file):
             text=True)
 
     (stdout, stderr) = process.communicate()
-    
-    func_list = row_2_list(stdout) 
+
+    func_list = row_2_list(stdout)
     func_list = find_main(func_list)
 
     return(func_list)
 
-def row_2_list(text): 
+def row_2_list(text):
     func = list()
 
     for row in text.split("\n"):
@@ -98,8 +101,8 @@ def row_2_list(text):
     return(func)
 
 def find_main(f_list):
-    item = "main" 
-    
+    item = "main"
+
     if item in f_list:
         f_list.insert(0, f_list.pop(f_list.index(item)))
 
@@ -114,7 +117,7 @@ def create_dir(name):
 def run(cmd):
     invalid_pointer = 0
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, text=True)
-    
+
     while True:
         out = proc.stdout.readline()
         if out == '' and proc.poll() is not None:
@@ -142,7 +145,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
         logging.info("########################################")
         logging.info("[FILE] %s", c_file)
         logging.info("[ARGS] %s", esbmc_args)
-        logging.info("[FUNCTION] %s", item) 
+        logging.info("[FUNCTION] %s", item)
         logging.info("########################################\n")
 
         cmd = ([ESBMC, c_file] +
@@ -152,7 +155,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
                 esbmc_args)
 
         fail = run(cmd)
-        
+
         #If the last verification failed in invalid pointer, retest with "--no-pointer-check"
         if args.retest_pointer:
             if fail:
@@ -164,7 +167,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
                 logging.info("*****RETEST*****")
                 logging.info("[FILE] %s", c_file)
                 logging.info("[ARGS] %s", esbmc_args)
-                logging.info("[FUNCTION] %s", item) 
+                logging.info("[FUNCTION] %s", item)
                 logging.info("########################################\n")
 
                 run(cmd)
@@ -175,7 +178,7 @@ def list_c_files():
     file_list = glob.glob("*.c")
 
     if not len(file_list):
-        logging.error("There is not .c file here!!") 
+        logging.error("There is not .c file here!!")
         sys.exit()
 
     return(file_list)
@@ -215,7 +218,6 @@ def configure_logs(verbose):
     logger.addHandler(file_handler)
 
 def main():
-
     args = arguments()
 
     configure_logs(args.verbose)
@@ -240,17 +242,17 @@ def main():
     # Run ESBMC on each file found
     for c_file in all_c_files:
         start = time.time()
-        
+
         run_esbmc(c_file, cmd_line, dep_list, args)
 
         elapsed = (time.time() - start)
 
         logging.info("########################################")
-        logging.info("[FILE]: %s [TIME]: %s", c_file, elapsed)  
+        logging.info("[FILE]: %s [TIME]: %s", c_file, elapsed)
         logging.info("########################################\n")
 
     elapsed_all = (time.time() - start_all)
-    logging.info("[OVERALL TIME]: %s", elapsed_all)  
+    logging.info("[OVERALL TIME]: %s", elapsed_all)
 
     # Run csvwr to export output to a spreadsheet
     csvwr.export_cex()
