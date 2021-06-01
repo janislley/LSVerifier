@@ -88,7 +88,7 @@ def run(cmd):
     while True:
         out = proc.stdout.readline()
         err = proc.stderr.readline()
-        if out == '' and proc.poll() is not None:
+        if out == '' and err == '' and proc.poll() is not None:
             break
         if out:
             logging.info(out.strip())
