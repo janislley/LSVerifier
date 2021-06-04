@@ -7,9 +7,9 @@ import argparse
 import shlex
 import sys
 import os
-import sys
 import logging
 import csvwr
+from pathlib import Path
 
 CTAGS = "ctags"
 CTAGS_TAB = "-x"
@@ -137,8 +137,14 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
         logging.info("")
 
-def list_c_files():
-    file_list = glob.glob("*.c")
+def list_c_files(recursive):
+    file_list = []
+
+    if recursive:
+        for path in Path(".").rglob("*.c"):
+           file_list.append(str(path))
+    else:
+        file_list = glob.glob("*.c")
 
     if not len(file_list):
         logging.error("There is not .c file here!!")
@@ -152,6 +158,7 @@ def arguments():
     parser.add_argument("-i", "--libraries", help="Path to the file that describe the libraries dependecies", default=False)
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
+    parser.add_argument("-r", "--recursive", help="Enable Recursive Verification", action="store_true", default=False)
     parser.add_argument("-fl", "--file", help="File to be verified", default=False)
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     args = parser.parse_args()
@@ -192,7 +199,7 @@ def main():
     if args.file:
         all_c_files = [args.file]
     else:
-        all_c_files = list_c_files()
+        all_c_files = list_c_files(args.recursive)
 
 
     start_all = time.time()
