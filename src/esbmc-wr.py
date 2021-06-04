@@ -152,6 +152,7 @@ def arguments():
     parser.add_argument("-i", "--libraries", help="Path to the file that describe the libraries dependecies", default=False)
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
+    parser.add_argument("-fl", "--file", help="File to be verified", default=False)
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     args = parser.parse_args()
 
@@ -188,7 +189,11 @@ def main():
         dep_list = []
 
     # Get c files on the folder
-    all_c_files = list_c_files()
+    if args.file:
+        all_c_files = [args.file]
+    else:
+        all_c_files = list_c_files()
+
 
     start_all = time.time()
 
