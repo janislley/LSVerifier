@@ -137,12 +137,14 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
         logging.info("")
 
-def list_c_files(recursive):
+def list_c_files(recursive, directory):
     file_list = []
 
     if recursive:
         for path in Path(".").rglob("*.c"):
            file_list.append(str(path))
+    elif directory:
+        file_list = glob.glob(directory + "/*.c")
     else:
         file_list = glob.glob("*.c")
 
@@ -159,6 +161,7 @@ def arguments():
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
     parser.add_argument("-r", "--recursive", help="Enable Recursive Verification", action="store_true", default=False)
+    parser.add_argument("-d", "--directory", help="Set the directory to be verified", default=False)
     parser.add_argument("-fl", "--file", help="File to be verified", default=False)
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     args = parser.parse_args()
@@ -183,7 +186,7 @@ def main():
 
     configure_logs(args.verbose)
 
-    print("TESTE ESBMC Running...", flush=True)
+    print("ESBMC Running...", flush=True)
 
     # Format ESBMC arguments
     cmd_line = get_command_line(args)
@@ -199,7 +202,7 @@ def main():
     if args.file:
         all_c_files = [args.file]
     else:
-        all_c_files = list_c_files(args.recursive)
+        all_c_files = list_c_files(args.recursive, args.directory)
 
 
     start_all = time.time()
