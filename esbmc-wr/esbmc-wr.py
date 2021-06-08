@@ -9,6 +9,7 @@ import sys
 import os
 import logging
 import csvwr
+from tqdm import tqdm
 from pathlib import Path
 
 CTAGS = "ctags"
@@ -107,7 +108,9 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
     esbmc_args = shlex.split(cmd_line);
 
-    for item in func_list:
+    pbar = tqdm(func_list, leave=False, disable=(True if args.verbose else False))
+    for item in pbar:
+        pbar.set_description("Processing %s" % item)
         logging.info("########################################")
         logging.info("[FILE] %s", c_file)
         logging.info("[ARGS] %s", esbmc_args)
@@ -207,8 +210,10 @@ def main():
 
     start_all = time.time()
 
+    pbar = tqdm(all_c_files, disable=(True if args.verbose else False))
     # Run ESBMC on each file found
-    for c_file in all_c_files:
+    for c_file in pbar:
+        pbar.set_description("Processing %s" % c_file)
         start = time.time()
 
         run_esbmc(c_file, cmd_line, dep_list, args)
