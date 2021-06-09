@@ -8,7 +8,6 @@ import shlex
 import sys
 import os
 import csvwr
-import logging
 from log import log
 from tqdm import tqdm
 from pathlib import Path
@@ -76,7 +75,6 @@ def find_main(f_list):
 
     return(f_list)
 
-
 def run(cmd):
     invalid_pointer = 0
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -87,7 +85,7 @@ def run(cmd):
         if out == ''and proc.poll() is not None:
             break
         if out:
-            logging.info(out.strip())
+            log.info(out.strip())
             if POINTER_FAIL in out.strip():
                 invalid_pointer = 1
 
@@ -106,11 +104,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
     pbar = tqdm(func_list, leave=False, disable=(True if args.verbose else False))
     for item in pbar:
         pbar.set_description("Processing %s" % item)
-        logging.info("########################################")
-        logging.info("[FILE] %s", c_file)
-        logging.info("[ARGS] %s", esbmc_args)
-        logging.info("[FUNCTION] %s", item)
-        logging.info("########################################\n")
+        log.header(c_file, esbmc_args, item)
 
         cmd = ([ESBMC, c_file] +
                 ([] if not args.functions else [FUNCTION, item]) +
@@ -122,18 +116,10 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
         if args.retest_pointer:
             if fail:
                 cmd.append(NO_POINTER)
-
-                logging.info("")
-                logging.info("########################################")
-                logging.info("*****RETEST*****")
-                logging.info("[FILE] %s", c_file)
-                logging.info("[ARGS] %s", esbmc_args)
-                logging.info("[FUNCTION] %s", item)
-                logging.info("########################################\n")
-
+                log.header_reteste(c_file, esbmc_args, item)
                 run(cmd)
 
-        logging.info("")
+        log.info("")
 
 def list_c_files(recursive, directory):
     file_list = []
@@ -147,7 +133,7 @@ def list_c_files(recursive, directory):
         file_list = glob.glob("*.c")
 
     if not len(file_list):
-        logging.error("There is not .c file here!!")
+        log.error("There is not .c file here!!")
         sys.exit()
 
     return(file_list)
@@ -178,7 +164,7 @@ def main():
 
     # Read Libraries Dependencies File
     if args.libraries:
-        logging.info("Dependecies File: %s", args.libraries)
+        log.info("Dependecies File: %s" % args.libraries)
         dep_list = read_dep_file(args.libraries)
     else:
         dep_list = []
@@ -201,13 +187,11 @@ def main():
         run_esbmc(c_file, cmd_line, dep_list, args)
 
         elapsed = (time.time() - start)
+        log.finish_time(c_file, elapsed)
 
-        logging.info("########################################")
-        logging.info("[FILE]: %s [TIME]: %s", c_file, elapsed)
-        logging.info("########################################\n")
 
     elapsed_all = (time.time() - start_all)
-    logging.info("[OVERALL TIME]: %s", elapsed_all)
+    log.overall_time(elapsed_all)
 
     # Run csvwr to export output to a spreadsheet
     csvwr.export_cex()
