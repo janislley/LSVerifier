@@ -7,8 +7,9 @@ import argparse
 import shlex
 import sys
 import os
-import logging
 import csvwr
+import logging
+from log import log
 from tqdm import tqdm
 from pathlib import Path
 
@@ -20,7 +21,6 @@ ESBMC = "esbmc"
 FUNCTION = "--function"
 NO_POINTER = "--no-pointer-check"
 
-DIRECTORY = "output"
 POINTER_FAIL = "invalid pointer"
 
 DEP = "-I"
@@ -76,11 +76,6 @@ def find_main(f_list):
 
     return(f_list)
 
-def create_dir(name):
-    try:
-        os.mkdir(name)
-    except FileExistsError:
-        print("Directory ", name, " already exists.")
 
 def run(cmd):
     invalid_pointer = 0
@@ -171,23 +166,10 @@ def arguments():
 
     return(args)
 
-def configure_logs(verbose):
-    create_dir(DIRECTORY)
-
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-
-    if verbose:
-        stdout_handler = logging.StreamHandler(sys.stdout)
-        logger.addHandler(stdout_handler)
-
-    file_handler = logging.FileHandler("output/output.log")
-    logger.addHandler(file_handler)
-
 def main():
     args = arguments()
 
-    configure_logs(args.verbose)
+    log.configure(args.verbose)
 
     print("ESBMC Running...", flush=True)
 
