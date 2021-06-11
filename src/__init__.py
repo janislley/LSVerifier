@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import subprocess
 import glob
 import time
@@ -7,8 +5,8 @@ import argparse
 import shlex
 import sys
 import os
-import csvwr
-from log import log
+from src import csvwr
+from src.log import log
 from tqdm import tqdm
 from pathlib import Path
 
