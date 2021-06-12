@@ -5,7 +5,7 @@ import argparse
 import shlex
 import sys
 import os
-from src import csvwr
+from src.csvwr import csvwr
 from src.log import log
 from tqdm import tqdm
 from pathlib import Path
