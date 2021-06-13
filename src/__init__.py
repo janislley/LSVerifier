@@ -99,7 +99,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
     esbmc_args = shlex.split(cmd_line);
 
-    pbar = tqdm(func_list, leave=False, disable=(True if args.verbose else False))
+    pbar = tqdm(func_list, leave=False, disable=(True if args.verbose else False), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}")
     for item in pbar:
         pbar.set_description("Processing %s" % item)
         log.header(c_file, esbmc_args, item)
@@ -176,7 +176,7 @@ def main():
 
     start_all = time.time()
 
-    pbar = tqdm(all_c_files, disable=(True if args.verbose else False))
+    pbar = tqdm(all_c_files, disable=(True if args.verbose else False), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}")
     # Run ESBMC on each file found
     for c_file in pbar:
         pbar.set_description("Processing %s" % c_file)
