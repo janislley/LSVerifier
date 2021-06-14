@@ -17,14 +17,12 @@ errorPattern = 'Violated property'
 errorName = ''
 DIRECTORY = "output"
 
-print("Saving Output...")
-
 def create_csv():
     with open(os.path.join(DIRECTORY,'output.csv'), mode='w') as csv_file:
-        fieldnames = ['fileName', 
-                'functionVerified', 
-                'functionName', 
-                'functionLine', 
+        fieldnames = ['fileName',
+                'functionVerified',
+                'functionName',
+                'functionLine',
                 'error']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames, lineterminator = '\n')
         writer.writeheader()
@@ -44,36 +42,36 @@ def search_cex():
         lines = fp.readlines()
         for i in range(0, len(lines)):
             line = lines[i]
-            
+
             if('FILE' in line):
                 match = re.search(fileNamePattern, line)
                 if(match):
                     fileName = match.group(1)
-            
+
             if('FUNCTION' in line):
                 match = re.search(funcVeriPattern, line)
                 if(match):
                     funcVeri = match.group(1)
-    
+
             if('Counterexample' in line):
                 hasFailed = True
-            
+
             if(hasFailed):
                 match = False
                 functionName = ''
                 functionLine = ''
                 errorName = ''
-                
+
                 # Find Line
                 match = re.search(linePattern, line, re.IGNORECASE)
                 if(match):
                     functionLine = match.group(1)
-    
+
                 # Find function name
                 match = re.search(namePattern, line, re.IGNORECASE)
                 if(match):
                     functionName = match.group(1)
-    
+
                     # Find error name
                     for j in range(1,6):
                         newLine = lines[i + j]
