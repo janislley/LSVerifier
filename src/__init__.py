@@ -5,6 +5,7 @@ import argparse
 import shlex
 import sys
 import os
+from shutil import which
 from src.csvwr import csvwr
 from src.log import log
 from src.bar import Bar
@@ -150,7 +151,14 @@ def arguments():
 
     return(args)
 
+def is_esbmc_installed():
+    if not which(ESBMC) is not None:
+        print("ESBMC not found!!")
+        sys.exit()
+
 def main():
+    is_esbmc_installed()
+
     args = arguments()
 
     log.configure(args.verbose)
