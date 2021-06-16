@@ -1,37 +1,38 @@
 **-- This tool is still under development! --**
 
-### Prepare the environment
+## esbmc-wr
+A [ESBMC](https://github.com/esbmc/esbmc) wrapper thats allow to verify multiples files and functions on a single run.
 
-Make the script executable
+## Installation
+#### Dependecies
+You must have ESBMC built and exported on yout PATH variable.  
+This [guide](https://github.com/esbmc/esbmc/blob/master/BUILDING.md) describe how build ESBMC.
+
+#### Install esbmc-wr
+1. Clone this repo:
 ```
-chmod +x esbmc-wr.py
+$ git clone https://github.com/thalestas/esbmc-wr.git
 ```
 
-Export the script path
+2. Install using pip
 ```
-export PATH=$PATH:$PWD
+$ cd esbmc-wr 
+$ pip3 install .
 ```
 
-### Run the script
+## Usage
 
-In order to run the esbmc-wr, it is necessary run it on the folder where .c files are located.
+###### 1. Verify all ```.c``` files in a folder:  
 
-Following parameter could be used:
-
-`-m` - Enable Memory Leak Check;  
-`-u` - Enable and set unwind number. Ex. `-u 50`;  
-`-nu` - Enable No Unwind Assertions;  
-`-ib` - Enable Incremental BMC;  
-`-p` - Enable No Pointer Check;  
-`-o` - Enable Overflow Check;  
-`-k` - Enable k-induction parallel;  
-`-i` - "Path to the file that describe the libraries dependecies. Each line must contain a library dependency path. Refer to a `dep.txt` as example". Ex `-i dep.txt`;  
-`-t` - Enable ESBMC timeout in second;  
-`-f` - Enable Verification by function;  
-`-w` - Enable Witness Output. It makes ESBMC generate graphML;  
-`-h` - Shows help;  
-
-An usage example:
+In the project that you want to verify, run:
 ```
-python3 esbmc-wr.py -u 1 -nu -i dep.txt
+$ esbmc-wr
 ```
+
+###### 2. Configure ESBMC parameters:  
+
+To set the ESBMC parameter, you should use ```-e```:
+```
+$ esbmc-wr -e "--unwind 1 --no-unwinding-assertions"
+```
+
