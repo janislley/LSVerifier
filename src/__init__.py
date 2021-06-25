@@ -59,7 +59,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
         if args.retest_pointer:
             if fail:
                 cmd.append(NO_POINTER)
-                log.header_reteste(c_file, esbmc_args, item)
+                log.header_retest(c_file, esbmc_args, item)
                 run(cmd)
 
         log.info("")

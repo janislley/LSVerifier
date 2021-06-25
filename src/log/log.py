@@ -37,7 +37,7 @@ def header(c_file, esbmc_args, item):
     logging.info("[FUNCTION] %s", item)
     logging.info("########################################\n")
 
-def header_reteste(c_file, esbmc_args, item):
+def header_retest(c_file, esbmc_args, item):
     logging.info("")
     logging.info("########################################")
     logging.info("*****RETEST*****")
