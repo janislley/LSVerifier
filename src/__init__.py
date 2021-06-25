@@ -163,7 +163,7 @@ def main():
 
     log.configure(args.verbose)
 
-    print("ESBMC Running...", flush=True)
+    print("ESBMC Running...")
 
     # Format ESBMC arguments
     cmd_line = get_command_line(args)
@@ -201,7 +201,7 @@ def main():
 
     # Run csvwr to export output to a spreadsheet
     csvwr.export_cex()
-    print("Done!", flush=True)
+    print("Done!")
 
 if __name__ == "__main__":
     main()
