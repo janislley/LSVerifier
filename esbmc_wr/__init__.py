@@ -3,10 +3,10 @@ import time
 import argparse
 import shlex
 import os
-from src.csvwr import csvwr
-from src.log import log
-from src.bar import Bar
-from src.utils import utils
+from esbmc_wr.csvwr import csvwr
+from esbmc_wr.log import log
+from esbmc_wr.bar import Bar
+from esbmc_wr.utils import utils
 
 ESBMC = "esbmc"
 

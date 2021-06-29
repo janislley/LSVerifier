@@ -108,7 +108,7 @@ setup(
     # py_modules=['mypackage'],
 
     entry_points={
-        'console_scripts': ['esbmc-wr = src:main'],
+        'console_scripts': ['esbmc-wr = esbmc_wr:main'],
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
