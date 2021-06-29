@@ -1,67 +1,11 @@
-import subprocess
 import time
 import argparse
-import shlex
 import os
 from esbmc_wr.csvwr import csvwr
 from esbmc_wr.log import log
 from esbmc_wr.bar import Bar
 from esbmc_wr.utils import utils
-
-ESBMC = "esbmc"
-
-FUNCTION = "--function"
-NO_POINTER = "--no-pointer-check"
-
-POINTER_FAIL = "invalid pointer"
-
-DEP = "-I"
-
-def run(cmd):
-    invalid_pointer = 0
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-
-    while True:
-        out = proc.stdout.readline()
-
-        if out == ''and proc.poll() is not None:
-            break
-        if out:
-            log.info(out.strip())
-            if POINTER_FAIL in out.strip():
-                invalid_pointer = 1
-
-    return invalid_pointer
-
-def run_esbmc(c_file, cmd_line, dep_list, args):
-    esbmc_args = []
-
-    if not args.functions:
-        func_list = ["main"]
-    else:
-        func_list = utils.list_functions(c_file)
-
-    esbmc_args = shlex.split(cmd_line);
-
-    pbar = Bar(func_list, leave=False, verbose=args.verbose)
-    for item in pbar:
-        pbar.set_description("Processing %s" % item)
-        log.header(c_file, esbmc_args, item)
-
-        cmd = ([ESBMC, c_file] +
-                ([] if not args.functions else [FUNCTION, item]) +
-                dep_list +
-                esbmc_args)
-
-        fail = run(cmd)
-
-        if args.retest_pointer:
-            if fail:
-                cmd.append(NO_POINTER)
-                log.header_retest(c_file, esbmc_args, item)
-                run(cmd)
-
-        log.info("")
+from esbmc_wr.utils import shell
 
 def arguments():
     parser = argparse.ArgumentParser("Input Options")
@@ -111,7 +55,7 @@ def main():
         pbar.set_description("Processing %s" % c_file)
         start = time.time()
 
-        run_esbmc(c_file, cmd_line, dep_list, args)
+        shell.run_esbmc(c_file, cmd_line, dep_list, args)
 
         elapsed = (time.time() - start)
         log.finish_time(c_file, elapsed)
