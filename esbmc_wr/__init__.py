@@ -30,32 +30,28 @@ def main():
 
     print("ESBMC Running...")
 
-    # Format ESBMC arguments
     cmd_line = utils.get_command_line(args)
 
-    # Read Libraries Dependencies File
     if args.libraries:
         log.info("Dependecies File: %s" % args.libraries)
         dep_list = utils.read_dep_file(args.libraries)
     else:
         dep_list = []
 
-    # Get c files on the folder
     if args.file:
         all_c_files = [args.file]
     else:
         all_c_files = utils.list_c_files(args.recursive, args.directory)
 
-
     start_all = time.time()
 
+    n_func = 0
     pbar = Bar(all_c_files, verbose=args.verbose)
-    # Run ESBMC on each file found
     for c_file in pbar:
         pbar.set_description("Processing %s" % c_file)
         start = time.time()
 
-        shell.run_esbmc(c_file, cmd_line, dep_list, args)
+        n_func += shell.run_esbmc(c_file, cmd_line, dep_list, args)
 
         elapsed = (time.time() - start)
         log.finish_time(c_file, elapsed)
@@ -64,8 +60,9 @@ def main():
     elapsed_all = (time.time() - start_all)
     log.overall_time(elapsed_all)
 
-    # Run csvwr to export output to a spreadsheet
-    csvwr.export_cex()
+    cex_list = csvwr.search_cex()
+    log.summary(len(all_c_files), n_func, len(cex_list))
+    csvwr.export_cex(cex_list)
     print("Done!")
 
 if __name__ == "__main__":

@@ -5,24 +5,24 @@ import sys
 import os
 
 count = 0
-namePattern = 'function(.*)thread'
-linePattern = 'line(.*)function'
-fileNamePattern = 'FILE](.*)'
-funcVeriPattern = 'FUNCTION](.*)'
-fileName = ''
-funcVeri = ''
-functionName = ''
-functionLine = ''
-errorPattern = 'Violated property'
-errorName = ''
+name_pattern = 'function(.*)thread'
+line_pattern = 'line(.*)function'
+file_name_pattern = 'FILE](.*)'
+func_veri_pattern = 'FUNCTION](.*)'
+file_name = ''
+func_veri = ''
+function_name = ''
+function_line = ''
+error_pattern = 'Violated property'
+error_name = ''
 DIRECTORY = "output"
 
 def create_csv():
     with open(os.path.join(DIRECTORY,'output.csv'), mode='w') as csv_file:
-        fieldnames = ['fileName',
+        fieldnames = ['file_name',
                 'functionVerified',
-                'functionName',
-                'functionLine',
+                'function_name',
+                'function_line',
                 'error']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames, lineterminator = '\n')
         writer.writeheader()
@@ -36,7 +36,7 @@ def search_duplicate(file_name, function_name, line):
                 return True;
 
 def search_cex():
-    hasFailed = False
+    has_failed = False
     cex_list = []
     with open(os.path.join(DIRECTORY, "output.log")) as fp: 
         lines = fp.readlines()
@@ -44,47 +44,46 @@ def search_cex():
             line = lines[i]
 
             if('FILE' in line):
-                match = re.search(fileNamePattern, line)
+                match = re.search(file_name_pattern, line)
                 if(match):
-                    fileName = match.group(1)
+                    file_name = match.group(1)
 
             if('FUNCTION' in line):
-                match = re.search(funcVeriPattern, line)
+                match = re.search(func_veri_pattern, line)
                 if(match):
-                    funcVeri = match.group(1)
+                    func_veri = match.group(1)
 
             if('Counterexample' in line):
-                hasFailed = True
+                has_failed = True
 
-            if(hasFailed):
+            if(has_failed):
                 match = False
-                functionName = ''
-                functionLine = ''
-                errorName = ''
+                function_name = ''
+                function_line = ''
+                error_name = ''
 
                 # Find Line
-                match = re.search(linePattern, line, re.IGNORECASE)
+                match = re.search(line_pattern, line, re.IGNORECASE)
                 if(match):
-                    functionLine = match.group(1)
+                    function_line = match.group(1)
 
                 # Find function name
-                match = re.search(namePattern, line, re.IGNORECASE)
+                match = re.search(name_pattern, line, re.IGNORECASE)
                 if(match):
-                    functionName = match.group(1)
+                    function_name = match.group(1)
 
                     # Find error name
                     for j in range(1,6):
                         newLine = lines[i + j]
-                        match = re.search(errorPattern, newLine, re.IGNORECASE)
+                        match = re.search(error_pattern, newLine, re.IGNORECASE)
                         if(match):
-                            errorName = lines[i + j + 2].rstrip()
+                            error_name = lines[i + j + 2].rstrip()
 
-                            cex_list.append([fileName, funcVeri, functionName, functionLine, errorName])
+                            cex_list.append([file_name, func_veri, function_name, function_line, error_name])
     return cex_list
 
-def export_cex():
+def export_cex(cex_list):
     create_csv()
-    cex_list = search_cex()
     for cex in cex_list:
         if(not search_duplicate(cex[0], cex[2], cex[3])):
             with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:

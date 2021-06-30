@@ -53,3 +53,12 @@ def finish_time(c_file, elapsed):
 
 def overall_time(elapsed_all):
     logging.info("[OVERALL TIME]: %s", elapsed_all)
+
+def summary(n_files, n_func, n_cex):
+    print("\n########################################")
+    print("Summary:\n")
+    print("Files Verified: ", n_files)
+    print("Functions Verified: ", n_func)
+    print("Counterexamples: ", n_cex)
+    print("########################################\n")
+
