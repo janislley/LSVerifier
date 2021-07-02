@@ -26,7 +26,7 @@ def main():
 
     args = arguments()
 
-    log.configure(args.verbose)
+    log_name = log.configure(args.verbose)
 
     print("ESBMC Running...")
 
@@ -60,9 +60,9 @@ def main():
     elapsed_all = (time.time() - start_all)
     log.overall_time(elapsed_all)
 
-    cex_list = csvwr.search_cex()
+    cex_list = csvwr.search_cex(log_name)
     log.summary(len(all_c_files), n_func, len(cex_list))
-    csvwr.export_cex(cex_list)
+    csvwr.export_cex(cex_list, log_name)
     print("Done!")
 
 if __name__ == "__main__":

@@ -17,8 +17,8 @@ error_pattern = 'Violated property'
 error_name = ''
 DIRECTORY = "output"
 
-def create_csv():
-    with open(os.path.join(DIRECTORY,'output.csv'), mode='w') as csv_file:
+def create_csv(csv_name):
+    with open(os.path.join(DIRECTORY,csv_name), mode='w') as csv_file:
         fieldnames = ['file_name',
                 'functionVerified',
                 'function_name',
@@ -28,17 +28,17 @@ def create_csv():
         writer.writeheader()
     csv_file.close()
 
-def search_duplicate(file_name, function_name, line):
-    with open(os.path.join(DIRECTORY,'output.csv'), mode='r') as csv_file:
+def search_duplicate(file_name, function_name, line, csv_name):
+    with open(os.path.join(DIRECTORY, csv_name), mode='r') as csv_file:
         for row in csv.reader(csv_file):
             if(file_name and function_name and line in row):
                 csv_file.close()
                 return True;
 
-def search_cex():
+def search_cex(log_name):
     has_failed = False
     cex_list = []
-    with open(os.path.join(DIRECTORY, "output.log")) as fp: 
+    with open(os.path.join(DIRECTORY, log_name)) as fp:
         lines = fp.readlines()
         for i in range(0, len(lines)):
             line = lines[i]
@@ -82,10 +82,11 @@ def search_cex():
                             cex_list.append([file_name, func_veri, function_name, function_line, error_name])
     return cex_list
 
-def export_cex(cex_list):
-    create_csv()
+def export_cex(cex_list, log_name):
+    csv_name = log_name[:-3] + "csv"
+    create_csv(csv_name)
     for cex in cex_list:
-        if(not search_duplicate(cex[0], cex[2], cex[3])):
-            with open(os.path.join(DIRECTORY,'output.csv'), mode='a') as csv_file:
+        if(not search_duplicate(cex[0], cex[2], cex[3], csv_name)):
+            with open(os.path.join(DIRECTORY, csv_name), mode='a') as csv_file:
                 writer = csv.writer(csv_file)
                 writer.writerow(cex)

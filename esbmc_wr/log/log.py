@@ -1,6 +1,7 @@
 import os
 import sys
 import logging
+from datetime import datetime
 
 DIRECTORY = "output"
 LOG_FILE = "output.log"
@@ -21,8 +22,14 @@ def configure(verbose):
         stdout_handler = logging.StreamHandler(sys.stdout)
         logger.addHandler(stdout_handler)
 
-    file_handler = logging.FileHandler("output/output.log")
+    date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+
+    log_name = "esbmc-{}.log".format(date)
+
+    file_handler = logging.FileHandler("output/"+log_name)
     logger.addHandler(file_handler)
+
+    return log_name
 
 def info(msg):
     logging.info(msg)
