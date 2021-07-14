@@ -1,6 +1,7 @@
 import time
 import argparse
 import os
+import tracemalloc
 from esbmc_wr.csvwr import csvwr
 from esbmc_wr.log import log
 from esbmc_wr.bar import Bar
@@ -22,6 +23,8 @@ def arguments():
     return(args)
 
 def main():
+    tracemalloc.start()
+
     utils.is_esbmc_installed()
 
     args = arguments()
@@ -59,9 +62,10 @@ def main():
 
     elapsed_all = (time.time() - start_all)
     log.overall_time(elapsed_all)
-
     cex_list = csvwr.search_cex(log_name)
-    log.summary(len(all_c_files), n_func, len(cex_list))
+    current, peak = tracemalloc.get_traced_memory()
+    log.summary(len(all_c_files), n_func, len(cex_list), elapsed_all, peak)
+
     csvwr.export_cex(cex_list, log_name)
     print("Done!")
 
