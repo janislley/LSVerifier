@@ -55,4 +55,4 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
         log.info("")
 
-        return len(func_list)
+    return len(func_list)
