@@ -1,5 +1,6 @@
 import shlex
 import subprocess
+from pkg_resources import resource_filename
 from esbmc_wr.utils import utils
 from esbmc_wr.log import log
 from esbmc_wr.bar import Bar
@@ -8,6 +9,9 @@ ESBMC = "esbmc"
 FUNCTION = "--function"
 NO_POINTER = "--no-pointer-check"
 POINTER_FAIL = "invalid pointer"
+
+def get_esbmc_path():
+   return resource_filename('esbmc_wr','bin/')
 
 def run(cmd):
     invalid_pointer = 0
@@ -28,6 +32,8 @@ def run(cmd):
 def run_esbmc(c_file, cmd_line, dep_list, args):
     esbmc_args = []
 
+    esbmc_path = get_esbmc_path() + ESBMC
+
     if not args.functions:
         func_list = ["main"]
     else:
@@ -40,7 +46,7 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
         pbar.set_description("Processing %s" % item)
         log.header(c_file, esbmc_args, item)
 
-        cmd = ([ESBMC, c_file] +
+        cmd = ([esbmc_path, c_file] +
                 ([] if not args.functions else [FUNCTION, item]) +
                 dep_list +
                 esbmc_args)

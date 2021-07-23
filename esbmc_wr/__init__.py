@@ -25,8 +25,6 @@ def arguments():
 def main():
     tracemalloc.start()
 
-    utils.is_esbmc_installed()
-
     args = arguments()
 
     log_name = log.configure(args.verbose)
