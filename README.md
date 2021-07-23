@@ -2,10 +2,6 @@
 A [ESBMC](https://github.com/esbmc/esbmc) wrapper thats allow to verify multiples files and functions on a single run.
 
 ## Installation
-#### Dependecies
-You must have ESBMC built and exported on yout PATH variable.  
-This [guide](https://github.com/esbmc/esbmc/blob/master/BUILDING.md) describe how build ESBMC.
-
 #### Install esbmc-wr
 
 ##### From repo
@@ -41,7 +37,14 @@ To set the ESBMC parameter, you should use ```-e```:
 $ esbmc-wr -e "--unwind 1 --no-unwinding-assertions"
 ```
 
-###### 3. esbmc-wr help
+###### 3. Verify each function of ```.c``` files recursively:  
+
+To set the ESBMC parameter, you should use ```-e```:
+```
+$ esbmc-wr -r -f -e "--unwind 1 --no-unwinding-assertions"
+```
+
+###### 4. esbmc-wr help
 ```
 $ esbmc-wr -h
 
@@ -63,3 +66,11 @@ optional arguments:
   -rp, --retest-pointer  
                         Retest Invalid Pointer
 ```
+
+## Output
+
+The verification output will be saved on ```output``` folder that will be created on currently path.
+Each verification will generate two files:
+
+- esbmc-**DATE**.log
+- esbmc-**DATE**.csv
