@@ -16,6 +16,7 @@ def arguments():
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
     parser.add_argument("-r", "--recursive", help="Enable Recursive Verification", action="store_true", default=False)
     parser.add_argument("-d", "--directory", help="Set the directory to be verified", default=False)
+    parser.add_argument("-p", "--propertyfile", help="Path to the property file", default=False)
     parser.add_argument("-fl", "--file", help="File to be verified", default=False)
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     args = parser.parse_args()
