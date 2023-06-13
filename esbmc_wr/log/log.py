@@ -10,7 +10,7 @@ def create_dir(name):
     try:
         os.mkdir(name)
     except FileExistsError:
-        print("Directory ", name, " already exists.")
+        pass
 
 def configure(verbose):
     create_dir(DIRECTORY)
