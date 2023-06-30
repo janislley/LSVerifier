@@ -30,12 +30,12 @@ def main():
 
     log_name = log.configure(args.verbose)
 
-    print("ESBMC Running...")
+    print("Running ESBMC...")
 
     cmd_line = utils.get_command_line(args)
 
     if args.libraries:
-        log.info("Dependecies File: %s" % args.libraries)
+        log.info("Dependency files: %s" % args.libraries)
         dep_list = utils.read_dep_file(args.libraries)
     else:
         dep_list = []
@@ -50,7 +50,7 @@ def main():
     n_func = 0
     pbar = Bar(all_c_files, verbose=args.verbose)
     for c_file in pbar:
-        pbar.set_description("Processing %s" % c_file)
+        pbar.set_description("Checking %s" % c_file)
         start = time.time()
 
         n_func += shell.run_esbmc(c_file, cmd_line, dep_list, args)
