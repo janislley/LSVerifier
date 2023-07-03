@@ -1,8 +1,8 @@
-## esbmc-wr
+## lsverifier
 A [ESBMC](https://github.com/esbmc/esbmc) wrapper thats allow to verify multiples files and functions on a single run.
 
 ## Installation
-#### Install esbmc-wr
+#### Install lsverifier
 
 ##### From repo
 1. Clone this repo:
@@ -12,13 +12,13 @@ $ git clone https://github.com/thalestas/esbmc-wr.git
 
 2. Install using pip
 ```
-$ cd esbmc-wr 
+$ cd lsverifier 
 $ pip3 install .
 ```
 
 ##### From Pypi
 ```
-$ pip3 install esbmc-wr
+$ pip3 install lsverifier
 ```
 
 ## Usage
@@ -27,26 +27,28 @@ $ pip3 install esbmc-wr
 
 In the project that you want to verify, run:
 ```
-$ esbmc-wr
+$ lsverifier
 ```
 
 ###### 2. Configure ESBMC parameters:  
 
 To set the ESBMC parameter, you should use ```-e```:
+
 ```
-$ esbmc-wr -e "--unwind 1 --no-unwinding-assertions"
+$ lsverifier -e "--unwind 1 --no-unwinding-assertions"
 ```
 
 ###### 3. Verify each function of ```.c``` files recursively:  
 
 To set the ESBMC parameter, you should use ```-e```:
+
 ```
-$ esbmc-wr -r -f -e "--unwind 1 --no-unwinding-assertions"
+$ lsverifier -r -f -e "--unwind 1 --no-unwinding-assertions"
 ```
 
-###### 4. esbmc-wr help
+###### 4. lsverifier help
 ```
-$ esbmc-wr -h
+$ lsverifier -h
 
 usage: Input Options [-h] [-e ESBMC_PARAMETER] [-i LIBRARIES] [-f] [-v] [-r] [-d DIRECTORY] [-fl FILE] [-rp]
 

@@ -2,11 +2,11 @@ import time
 import argparse
 import os
 import tracemalloc
-from esbmc_wr.csvwr import csvwr
-from esbmc_wr.log import log
-from esbmc_wr.bar import Bar
-from esbmc_wr.utils import utils
-from esbmc_wr.utils import shell
+from lsverifier.csvwr import csvwr
+from lsverifier.log import log
+from lsverifier.bar import Bar
+from lsverifier.utils import utils
+from lsverifier.utils import shell
 
 def arguments():
     parser = argparse.ArgumentParser("Input Options")

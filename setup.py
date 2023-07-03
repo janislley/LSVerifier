@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'esbmc-wr'
+NAME = 'lsverifier'
 DESCRIPTION = 'A ESBMC command line wrapper.'
 URL = 'https://github.com/thalestas/esbmc-wr'
 EMAIL = 'thales.tas@gmail.com'
@@ -108,7 +108,7 @@ setup(
     # py_modules=['mypackage'],
 
     entry_points={
-        'console_scripts': ['esbmc-wr = esbmc_wr:main'],
+        'console_scripts': ['lsverifier = lsverifier:main'],
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,

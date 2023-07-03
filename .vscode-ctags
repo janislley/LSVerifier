@@ -1,0 +1,15 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+bit_shift	esbmc_wr/tests/main.c	/^void bit_shift() {$/;"	f
+do_job	esbmc_wr/tests/main.c	/^void* do_job(void* arg) {$/;"	f
+excluded	esbmc_wr/tests/main.c	/^void excluded() {$/;"	f
+main	esbmc_wr/tests/main.c	/^int main(void) {$/;"	f
+malloc_func	esbmc_wr/tests/main.c	/^void malloc_func() {$/;"	f
+ptr_func	esbmc_wr/tests/main.c	/^void* ptr_func(void *arg) {$/;"	f
+thread_func	esbmc_wr/tests/main.c	/^void thread_func() {$/;"	f
+vector_func	esbmc_wr/tests/main.c	/^void vector_func(char c[]) {$/;"	f
+void_func	esbmc_wr/tests/main.c	/^void void_func() {$/;"	f

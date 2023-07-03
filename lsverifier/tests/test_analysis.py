@@ -1,5 +1,5 @@
 import unittest
-from esbmc_wr.analysis.analysis import get_prioritized_functions
+from lsverifier.analysis.analysis import get_prioritized_functions
 
 class TestPrioritizedFunctions(unittest.TestCase):
     def test_get_prioritized_functions(self):

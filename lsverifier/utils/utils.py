@@ -3,7 +3,7 @@ import subprocess
 import glob
 from shutil import which
 from pathlib import Path
-from esbmc_wr.log import log
+from lsverifier.log import log
 
 ESBMC = "esbmc"
 CTAGS = "ctags"
