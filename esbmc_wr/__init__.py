@@ -41,7 +41,7 @@ def main():
         dep_list = []
 
     if args.file:
-        all_c_files = [args.file]
+        all_c_files = [os.path.join(args.directory, args.file)]
     else:
         all_c_files = utils.list_c_files(args.recursive, args.directory)
 
