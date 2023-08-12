@@ -67,7 +67,6 @@ def list_c_files(recursive, directory):
     file_list = []
 
     search_path = directory if directory else "."
-    print("Inside list_c_files, directory:", directory)
 
     if recursive:
         for path in Path(search_path).rglob("*.c"):
