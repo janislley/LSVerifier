@@ -1,6 +1,8 @@
+import os
 import sys
 import subprocess
 import glob
+from pathlib import Path
 from shutil import which
 from pathlib import Path
 from esbmc_wr.log import log
@@ -64,11 +66,14 @@ def find_main(f_list):
 def list_c_files(recursive, directory):
     file_list = []
 
+    search_path = directory if directory else "."
+    print("Inside list_c_files, directory:", directory)
+
     if recursive:
-        for path in Path(".").rglob("*.c"):
-           file_list.append(str(path))
+        for path in Path(search_path).rglob("*.c"):
+            file_list.append(str(path))
     elif directory:
-        file_list = glob.glob(directory + "/*.c")
+        file_list = glob.glob(os.path.join(search_path, "*.c"))
     else:
         file_list = glob.glob("*.c")
 
