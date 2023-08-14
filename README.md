@@ -69,10 +69,10 @@ optional arguments:
                         Retest Invalid Pointer
 ```
 
-## Output
+## Verification output 
 
 The verification output will be saved on ```output``` folder that will be created on the current path.
 Each verification will generate two files:
 
-- esbmc-**DATE**.log
-- esbmc-**DATE**.csv
+- lsverifier-**DATE**.log
+- lsverifier-**DATE**.csv
