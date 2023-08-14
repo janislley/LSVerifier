@@ -24,9 +24,12 @@ def arguments():
     return(args)
 
 def main():
+
+    print("LSVerifier is loading...")
     tracemalloc.start()
 
     args = arguments()
+    print("Setting the verification parameters...")
 
     log_name = log.configure(args.verbose)
 
@@ -58,7 +61,6 @@ def main():
         elapsed = (time.time() - start)
         log.finish_time(c_file, elapsed)
 
-
     elapsed_all = (time.time() - start_all)
     log.overall_time(elapsed_all)
     cex_list = csvwr.search_cex(log_name)
@@ -66,7 +68,7 @@ def main():
     log.summary(len(all_c_files), n_func, len(cex_list), elapsed_all, peak)
 
     csvwr.export_cex(cex_list, log_name)
-    print("Done!")
+    print("LSVerifier - Verification is complete.")
 
 if __name__ == "__main__":
     main()

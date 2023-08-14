@@ -5,7 +5,7 @@ import glob
 from pathlib import Path
 from shutil import which
 from pathlib import Path
-from esbmc_wr.log import log
+from lsverifier.log import log
 
 ESBMC = "esbmc"
 CTAGS = "ctags"
@@ -77,12 +77,12 @@ def list_c_files(recursive, directory):
         file_list = glob.glob("*.c")
 
     if not len(file_list):
-        log.error("There is not .c file here!!")
+        log.error("There is not .c file here!")
         sys.exit()
 
     return(file_list)
 
 def is_esbmc_installed():
     if not which(ESBMC) is not None:
-        print("ESBMC not found!!")
+        print("ESBMC module not found!")
         sys.exit()

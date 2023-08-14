@@ -1,1 +1,1 @@
-recursive-include esbmc_wr/bin *
+recursive-include lsverifier/bin *

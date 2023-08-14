@@ -1,10 +1,10 @@
 import shlex
 import subprocess
 from pkg_resources import resource_filename
-from esbmc_wr.utils import utils
-from esbmc_wr.log import log
-from esbmc_wr.bar import Bar
-from esbmc_wr.analysis.analysis import get_prioritized_functions
+from lsverifier.utils import utils
+from lsverifier.log import log
+from lsverifier.bar import Bar
+from lsverifier.analysis.analysis import get_prioritized_functions
 
 ESBMC = "esbmc"
 FUNCTION = "--function"
@@ -12,7 +12,7 @@ NO_POINTER = "--no-pointer-check"
 POINTER_FAIL = "invalid pointer"
 
 def get_esbmc_path():
-   return resource_filename('esbmc_wr','bin/')
+   return resource_filename('lsverifier','bin/')
 
 def run(cmd):
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
