@@ -15,7 +15,7 @@ from setuptools import find_packages, setup, Command
 NAME = 'LSVerifier'
 DESCRIPTION = 'This open-source tool streamlines software verification by allowing the simultaneous assessment of extensive files and functions in a single run. By leveraging the ESBMC module, it enhances vulnerability detection and reinforces software security.'
 URL = 'https://github.com/janislley/LSVerifier'
-EMAIL = 'thales.tas@gmail.com'
+EMAIL = 'janislley@gmail.com'
 AUTHOR = 'Thales Silva / Janislley Oliveira / Bruno Farias'
 REQUIRES_PYTHON = '>=3.6.0'
 VERSION = '0.3.0'
