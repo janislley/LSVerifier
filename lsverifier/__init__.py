@@ -11,8 +11,9 @@ from lsverifier.utils import shell
 def arguments():
     parser = argparse.ArgumentParser("Input Options")
     parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
-    parser.add_argument("-i", "--libraries", help="Path to the file that describe the libraries dependecies", default=False)
+    parser.add_argument("-i", "--libraries", help="Path to the file that describes the libraries dependencies", default=False)
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
+    parser.add_argument("-fp", "--prioritized", help="Enable Prioritized Functions Verification", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
     parser.add_argument("-r", "--recursive", help="Enable Recursive Verification", action="store_true", default=False)
     parser.add_argument("-d", "--directory", help="Set the directory to be verified", default=False)
