@@ -46,7 +46,15 @@ To set the ESBMC parameter, you should use ```-e```:
 $ lsverifier -r -f -e "--unwind 1 --no-unwinding-assertions"
 ```
 
-###### 4. LSVerifier help
+###### 4. Verify an entire project folder by passing the folder path as an argument:
+
+To set the folder path parameter, you should use ```-d```:
+```
+lsverifier -r -f -e "--unwind 1 --no-unwinding-assertions" -i dep.txt -d folder_path/
+```
+
+###### 5. LSVerifier help
+
 ```
 $ lsverifier -h
 

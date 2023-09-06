@@ -40,12 +40,21 @@ def main():
 
     if args.libraries:
         log.info("Dependency files: %s" % args.libraries)
-        dep_list = utils.read_dep_file(args.libraries)
+        
+        # Create the full path to dep.txt within the specified directory
+        dep_txt_path = os.path.join(args.directory, args.libraries) if args.directory else args.libraries
+        
+        # Check if the file exists in the specified directory
+        if os.path.exists(dep_txt_path):
+            dep_list = utils.read_dep_file(dep_txt_path)
+        else:
+            print(f"The file {dep_txt_path} does not exist.")
+            dep_list = []
     else:
         dep_list = []
 
     if args.file:
-        all_c_files = [os.path.join(args.directory, args.file)]
+        all_c_files = [args.file]
     else:
         all_c_files = utils.list_c_files(args.recursive, args.directory)
 
