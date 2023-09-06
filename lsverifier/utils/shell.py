@@ -35,11 +35,11 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
     esbmc_path = get_esbmc_path() + ESBMC
 
-    if not args.functions and not args.prioritized:
+    if not args.functions and not args.function_prioritized:
         func_list = ["main"]
     elif args.functions:
         func_list = utils.list_functions(c_file)
-    elif args.prioritized:
+    elif args.function_prioritized:
         func_list = get_prioritized_functions(c_file)
 
     esbmc_args = shlex.split(cmd_line);
