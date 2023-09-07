@@ -46,6 +46,11 @@ def main():
 
     log_name = log.configure(args.verbose)
 
+    # Check if both -f and -fp are given
+    if args.functions and args.function_prioritized:
+        print("Error: Cannot use both -f and -fp options at the same time.")
+        return 1  # exit with an error code
+
     print("Running ESBMC module verification...")
 
     cmd_line = utils.get_command_line(args)
