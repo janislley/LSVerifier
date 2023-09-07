@@ -46,6 +46,11 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
     #print("Functions to be analysed: ", func_list)
 
+    # check a set of properties if any passed as an argument
+    if args.properties:
+        for prop in args.properties:
+            esbmc_args.append(f"--{prop}")
+
     for func in func_list:
         log.header(c_file, esbmc_args, func)
 

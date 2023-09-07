@@ -11,7 +11,19 @@ from lsverifier.utils import shell
 def arguments():
     parser = argparse.ArgumentParser("Input Options")
     parser.add_argument("-l", "--libraries", help="Path to the file that describes the libraries dependencies", default=False)
-    parser.add_argument("-p", "--properties", help="Properties to be verified", default=False)
+    parser.add_argument("-p", "--properties", help="Properties to be verified", nargs='+', choices=[
+        'multi-property',
+        'nan-check',
+        'memory-leak-check',
+        'floatbv',
+        'overflow-check',
+        'unsigned-overflow-check',
+        'ub-shift-check',
+        'struct-fields-check',
+        'deadlock-check',
+        'data-races-check',
+        'lock-order-check'
+    ], default=[])
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
     parser.add_argument("-fp", "--function-prioritized", help="Enable Prioritized Functions Verification", action="store_true", default=False)
     parser.add_argument("-fl", "--file", help="File to be verified", default=False)
