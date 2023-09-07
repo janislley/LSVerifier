@@ -11,10 +11,14 @@ ESBMC = "esbmc"
 CTAGS = "ctags"
 CTAGS_TAB = "-x"
 CTAGS_FUNC = "--c-types=f"
+DEFAULT_ESBMC_OPTIONS = "--unwind 1 --no-unwinding-assertions"
 
 def get_command_line(args):
-    cmd_line = ""
 
+    # Start with the default ESBMC options
+    cmd_line = DEFAULT_ESBMC_OPTIONS
+
+    # If the user has specified custom ESBMC parameters, use them
     if args.esbmc_parameter:
         para = args.esbmc_parameter
         para = para.split(" ")
