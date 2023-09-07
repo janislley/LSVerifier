@@ -44,7 +44,9 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
     esbmc_args = shlex.split(cmd_line);
 
-    #print("Functions to be analysed: ", func_list)
+    # show the list of functions to be analysed
+    if args.verbose:
+        print("Functions to be analysed: ", func_list)
 
     # check a set of properties if any passed as an argument
     if args.properties:
