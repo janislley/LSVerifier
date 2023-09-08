@@ -44,14 +44,15 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
     esbmc_args = shlex.split(cmd_line);
 
+    # check a set of properties if any passed as an argument
+    if args.properties:
+        esbmc_args.clear()
+        for prop in args.properties:
+            esbmc_args.append(f"--{prop}")
+
     # show the list of functions to be analysed
     if args.verbose:
         print("Functions to be analysed: ", func_list)
-
-    # check a set of properties if any passed as an argument
-    if args.properties:
-        for prop in args.properties:
-            esbmc_args.append(f"--{prop}")
 
     for func in func_list:
         log.header(c_file, esbmc_args, func)

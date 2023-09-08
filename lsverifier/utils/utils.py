@@ -15,11 +15,13 @@ DEFAULT_ESBMC_OPTIONS = "--unwind 1 --no-unwinding-assertions"
 
 def get_command_line(args):
 
-    # Start with the default ESBMC options
-    cmd_line = DEFAULT_ESBMC_OPTIONS
+    cmd_line = ""
 
+    # Start with the default ESBMC options
+    if not args.esbmc_parameter:
+        cmd_line = DEFAULT_ESBMC_OPTIONS
+    else:
     # If the user has specified custom ESBMC parameters, use them
-    if args.esbmc_parameter:
         para = args.esbmc_parameter
         para = para.split(" ")
         for i in range(len(para)):
