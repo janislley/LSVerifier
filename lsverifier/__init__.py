@@ -8,10 +8,24 @@ from lsverifier.bar import Bar
 from lsverifier.utils import utils
 from lsverifier.utils import shell
 
+class NewLineHelpFormatter(argparse.HelpFormatter):
+    def _split_lines(self, text, width):
+        if text.startswith('Properties to be verified'):
+            properties = text.replace('Properties to be verified (comma separated): ', '').split(',')
+            lines = [prop.strip() for prop in properties]
+            return lines
+        return argparse.HelpFormatter._split_lines(self, text, width)
+
+    def _format_action_invocation(self, action):
+        if not action.option_strings or action.nargs == 0:
+            return super(NewLineHelpFormatter, self)._format_action_invocation(action)
+        default = self._get_default_metavar_for_optional(action)
+        args_string = self._format_args(action, default)
+        return ', '.join(action.option_strings).replace(', ', ',') + ' ' + args_string
+
 def arguments():
-    parser = argparse.ArgumentParser("Input Options")
-    parser.add_argument("-l", "--libraries", help="Path to the file that describes the libraries dependencies", default=False)
-    parser.add_argument("-p", "--properties", help="Properties to be verified", nargs='+', choices=[
+
+    valid_choices = [
         'multi-property',
         'nan-check',
         'memory-leak-check',
@@ -23,7 +37,26 @@ def arguments():
         'deadlock-check',
         'data-races-check',
         'lock-order-check'
-    ], default=[])
+    ]
+        
+    parser = argparse.ArgumentParser(description="Input Options", formatter_class=NewLineHelpFormatter)
+    parser.add_argument("-l", "--libraries", help="Path to the file that describes the libraries dependencies", default=False)
+    parser.add_argument("-p", "--properties", 
+                        help="Properties to be verified (comma separated):\n" + 
+                             "                        multi-property,\n" + 
+                             "  nan-check,\n" + 
+                             "  memory-leak-check,\n" +
+                             "  floatbv,\n" + 
+                             "  overflow-check,\n" + 
+                             "  unsigned-overflow-check,\n" +
+                             "  ub-shift-check,\n" + 
+                             "  struct-fields-check,\n" + 
+                             "  deadlock-check,\n" +
+                             "  data-races-check,\n" + 
+                             "  lock-order-check",
+                        metavar="PROPERTIES",
+                        default="",
+                        type=str)
     parser.add_argument("-f", "--functions", help="Enable Functions Verification", action="store_true", default=False)
     parser.add_argument("-fp", "--function-prioritized", help="Enable Prioritized Functions Verification", action="store_true", default=False)
     parser.add_argument("-fl", "--file", help="File to be verified", default=False)
@@ -32,7 +65,15 @@ def arguments():
     parser.add_argument("-d", "--directory", help="Set the directory to be verified", default=False)
     parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
     parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
+
     args = parser.parse_args()
+
+    if args.properties:
+        args.properties = [p.strip() for p in args.properties.split(',')]  # This will remove any extra spaces
+        for prop in args.properties:
+            if prop not in valid_choices:
+                print(f"Error: {prop} is not a valid choice.")
+                exit(1)
 
     return(args)
 
