@@ -79,20 +79,18 @@ def arguments():
 
 def main():
 
-    print("LSVerifier is loading...")
     tracemalloc.start()
 
     args = arguments()
-    print("Setting the verification parameters...")
+    print("LSVerifier is loading...")
 
+    print("Setting the verification parameters...")
     log_name = log.configure(args.verbose)
 
     # Check if both -f and -fp are given
     if args.functions and args.function_prioritized:
         print("Error: Cannot use both -f and -fp options at the same time.")
         return 1  # exit with an error code
-
-    print("Running ESBMC module verification...")
 
     cmd_line = utils.get_command_line(args)
 
@@ -118,6 +116,7 @@ def main():
 
     start_all = time.time()
 
+    print("Running ESBMC module verification...")
     n_func = 0
     pbar = Bar(all_c_files, verbose=args.verbose)
     for c_file in pbar:
