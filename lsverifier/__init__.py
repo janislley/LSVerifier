@@ -63,7 +63,7 @@ def arguments():
     parser.add_argument("-v", "--verbose", help="Enable Verbose Output", action="store_true", default=False)
     parser.add_argument("-r", "--recursive", help="Enable Recursive Verification", action="store_true", default=False)
     parser.add_argument("-d", "--directory", help="Set the directory to be verified", default=False)
-    parser.add_argument("-rp", "--retest-pointer", help="Retest Invalid Pointer", action="store_true", default=False)
+    parser.add_argument("-dp", "--disable-pointer-check", help="Disable invalid pointer property verification", action="store_true", default=False)
     parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
 
     args = parser.parse_args()

@@ -8,7 +8,7 @@ from lsverifier.analysis.analysis import get_prioritized_functions
 
 ESBMC = "esbmc"
 FUNCTION = "--function"
-NO_POINTER = "--no-pointer-check"
+DISABLE_POINTER_CHECK = "--no-pointer-check"
 POINTER_FAIL = "invalid pointer"
 
 def get_esbmc_path():
@@ -67,9 +67,9 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
         fail = run(cmd)
 
-        if args.retest_pointer:
+        if args.disable_pointer_check:
             if fail:
-                cmd.append(NO_POINTER)
+                cmd.append(DISABLE_POINTER_CHECK)
                 log.header_retest(c_file, esbmc_args, func)
                 run(cmd)
 

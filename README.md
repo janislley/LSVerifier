@@ -7,7 +7,7 @@ This tool uses [ESBMC](https://github.com/esbmc/esbmc) module as a core verifica
 
 | Version | Improviments |
 |---------|--------------|
-| v0.3.0  | Support specific class of property verification; Prioritized functions verification, Retest invalid pointer. |
+| v0.3.0  | Support specific class of property verification; Prioritized functions verification, disable invalid pointer verification. |
 | v0.2.0  | Support for libraries dependencies; recursive verification for large software. |
 
 ## Installation
@@ -102,18 +102,27 @@ $ lsverifier -e "--unwind 1"
 ###### 6. Verify an entire project folder by passing the folder path as an argument:
 
 To set the folder path parameter, you should use ```-d```:
+
 ```
 lsverifier -r -f -i dep.txt -d folder_path/
 ```
 
-###### 7. LSVerifier help
+###### 7. Verify an entire project folder without checking invalid pointer ```-dp```:
+
+To set the parameter, you should use ```-dp```:
+
+```
+lsverifier -r -f -dp -d folder_path/
+```
+
+###### 8. LSVerifier help
 
 For more details, please check the help:
 
 ```
 $ lsverifier -h
 
-usage: lsverifier [-h] [-l LIBRARIES] [-p PROPERTIES] [-f] [-fp] [-fl FILE] [-v] [-r] [-d DIRECTORY] [-rp] [-e ESBMC_PARAMETER]
+usage: lsverifier [-h] [-l LIBRARIES] [-p PROPERTIES] [-f] [-fp] [-fl FILE] [-v] [-r] [-d DIRECTORY] [-dp] [-e ESBMC_PARAMETER]
 
 Input Options
 
@@ -142,8 +151,8 @@ optional arguments:
   -r, --recursive       Enable Recursive Verification
   -d,--directory DIRECTORY
                         Set the directory to be verified
-  -rp, --retest-pointer
-                        Retest Invalid Pointer
+  -dp, --disable-pointer-check
+                        Disable invalid pointer property verification
   -e,--esbmc-parameter ESBMC_PARAMETER
                         Use ESBMC parameter
 ```
