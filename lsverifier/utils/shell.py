@@ -35,6 +35,9 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
 
     esbmc_path = get_esbmc_path() + ESBMC
 
+    # Initialize func_list to an empty list or a default value
+    func_list = []
+
     if not args.functions and not args.function_prioritized:
         func_list = ["main"]
     elif args.functions:
