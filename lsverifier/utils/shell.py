@@ -60,11 +60,11 @@ def run_esbmc(c_file, cmd_line, dep_list, args):
     for func in func_list:
         log.header(c_file, esbmc_args, func)
 
-        cmd = ([esbmc_path, c_file] +
-                ([] if not args.functions else [FUNCTION, func]) +
-                dep_list +
-                esbmc_args)
+        cmd = [esbmc_path, c_file] + dep_list + esbmc_args
 
+        if args.functions or args.function_prioritized:
+            cmd += [FUNCTION, func]
+        
         fail = run(cmd)
 
         if args.disable_pointer_check:
