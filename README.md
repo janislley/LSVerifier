@@ -1,6 +1,15 @@
 ## LSVerifier
 
-LSVerifier is a command-line tool for formal verification of large ANSI-C projects in a single run. It leverages the [ESBMC](https://github.com/esbmc/esbmc) model checker as its core verification engine.
+LSVerifier is a command-line tool for formal verification of large ANSI-C projects in a single run. 
+
+It leverages the [ESBMC](https://github.com/esbmc/esbmc) model checker as its core verification engine.
+
+## Version
+
+| Version | Improviments |
+|---------|--------------|
+| v0.3.0  | Support specific class of property verification; Prioritized functions verification, Disable invalid pointer verification. |
+| v0.2.0  | Support for libraries dependencies; Recursive verification for large software. |
 
 ## Installation
 
@@ -32,7 +41,7 @@ $ pip3 install lsverifier
 #### 1. Verify a project
 ```
 $ cd <project-root>
-$ lsverifier -r -f .
+$ lsverifier -r -f
 ```
 
 For projects with third-party library dependencies, use ```-l``` option to specify header paths:
@@ -46,6 +55,11 @@ See an example of ```dep.txt``` below:
 ```
   /usr/include/glib-2.0/
   /usr/lib/x86_64-linux-gnu/glib-2.0/include/extcap/
+  extcap/
+  plugins/epan/ethercat/
+  plugins/epan/falco_bridge/
+  plugins/epan/wimaxmacphy/
+  epan/crypt/
   ...
 ```
 
@@ -61,7 +75,7 @@ If you want to verify a project using a prioritization scheme, run:
 
 ```
 $ cd <project-root>
-$ lsverifier -r -fp .
+$ lsverifier -r -fp
 ```
 
 #### 4. Verify an entire project by providing the folder path as an argument
@@ -69,7 +83,7 @@ $ lsverifier -r -fp .
 To set the folder path parameter, you should use ```-d```:
 
 ```
-lsverifier -r -f -i dep.txt -d project-root/
+lsverifier -r -f -l dep.txt -d project-root/
 ```
 
 #### 5. LSVerifier help
@@ -86,7 +100,7 @@ Input Options
 optional arguments:
   -h, --help            show this help message and exit
   -l,--libraries LIBRARIES
-                        Path to the file that describes the libraries dependencies
+                        Path to the file that describes the libraries' dependencies
   -p,--properties PROPERTIES
                         Properties to be verified (comma separated):
                         multi-property
