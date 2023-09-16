@@ -1,28 +1,20 @@
 ## LSVerifier
 
-An open-source tool that allows to verification of large files and functions on a single run.
-This tool uses [ESBMC](https://github.com/esbmc/esbmc) module as a core verification. 
-
-## Version
-
-| Version | Improviments |
-|---------|--------------|
-| v0.3.0  | Support specific class of property verification; Prioritized functions verification, disable invalid pointer verification. |
-| v0.2.0  | Support for libraries dependencies; recursive verification for large software. |
+LSVerifier is a command-line tool for formal verification of large ANSI-C projects in a single run. It leverages the [ESBMC](https://github.com/esbmc/esbmc) model checker as its core verification engine.
 
 ## Installation
 
 #### Install LSVerifier
 
-##### From repo
+##### From repository
 
-1. Clone this repository:
+1. Clone the repository:
 
 ```
 $ git clone https://github.com/janislley/lsverifier.git
 ```
 
-2. Than, install using pip
+2. Install using pip:
 
 ```
 $ cd LSVerifier
@@ -37,87 +29,52 @@ $ pip3 install lsverifier
 
 ## Usage
 
-###### 1. Verify a single ```.c``` file:  
-
-In the project that you want to verify, run:
-
+#### 1. Verify a project
 ```
-$ lsverifier -v -r -f -fp main.c
-```
-> **_NOTE:_**  ```-v``` is used to enable verbose output; ```-r``` is used to enable recursive verification; 
-
-###### 2. Verify all ```.c``` files in a folder:  
-
-In the project that you want to verify, run:
-
-```
-$ lsverifier -v -r -f
+$ cd <project-root>
+$ lsverifier -r -f .
 ```
 
-If the project has libraries dependencies, you should use ```-l``` to set the libraries dependencies file path:
+For projects with third-party library dependencies, use ```-l``` option to specify header paths:
 
 ```
-$ lsverifier -v -r -f -l dep.txt
+$ lsverifier -r -f -l dep.txt
 ```
 
-For exemple of ```dep.txt``` file, see below:
+See an example of ```dep.txt``` below:
 
 ```
   /usr/include/glib-2.0/
-  /usr/lib/x86_64-linux-gnu/glib-2.0/include/
-  extcap/
-  plugins/epan/ethercat/
-  plugins/epan/falco_bridge/
-  plugins/epan/wimaxmacphy/
-  randpkt_core/
-  writecap/
-  epan/crypt/
+  /usr/lib/x86_64-linux-gnu/glib-2.0/include/extcap/
+  ...
 ```
 
-###### 3. Verify all ```.c``` files in a folder by priorization:  
-
-In the project that you want to verify, run:
+#### 2. Verify a single C file
 
 ```
-$ lsverifier -v -r -f -fp
+$ lsverifier -f -fl file.c
 ```
 
-###### 4. Verify all ```.c``` files given a list of propertie's name:  
+#### 3. Verify C files using a priorization algorithm
 
-In the project that you want to verify, run:
+If you want to verify a project using a prioritization scheme, run:
 
 ```
-$ lsverifier -v -r -f -p memory-leak-check,overflow-check,deadlock-check,data-races-check
+$ cd <project-root>
+$ lsverifier -r -fp .
 ```
 
-###### 5. Configure ESBMC module parameters:  
-
-To set the ESBMC parameter, you should use ```-e```:
-```
-$ lsverifier -e "--unwind 1"
-```
-
-> **_NOTE:_** ```-e``` is used to set the ESBMC module parameters;
-
-###### 6. Verify an entire project folder by passing the folder path as an argument:
+#### 4. Verify an entire project by providing the folder path as an argument
 
 To set the folder path parameter, you should use ```-d```:
 
 ```
-lsverifier -r -f -i dep.txt -d folder_path/
+lsverifier -r -f -i dep.txt -d project-root/
 ```
 
-###### 7. Verify an entire project folder without checking invalid pointer ```-dp```:
+#### 5. LSVerifier help
 
-To set the parameter, you should use ```-dp```:
-
-```
-lsverifier -r -f -dp -d folder_path/
-```
-
-###### 8. LSVerifier help
-
-For more details, please check the help:
+For more details, check the help:
 
 ```
 $ lsverifier -h
@@ -157,10 +114,9 @@ optional arguments:
                         Use ESBMC parameter
 ```
 
-## Verification output 
+## Verification report
 
-The verification output will be saved on ```output``` folder that will be created on the current verification path.
-Each verification will generate two files:
+The verification results will be saved in ```output``` folder, automatically created in the current verification path. Each verification run generates two files:
 
-- lsverifier-**DATE**.log: This file contains the verification output log.
-- lsverifier-**DATE**.csv: This file contains the verification output in csv format.
+- lsverifier-**DATE**.log: Contains the verification output log.
+- lsverifier-**DATE**.csv: Contains the verification results in CSV format.
