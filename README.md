@@ -86,7 +86,17 @@ To set the folder path parameter, you should use ```-d```:
 lsverifier -r -f -l dep.txt -d project-root/
 ```
 
-#### 5. LSVerifier help
+#### 5. Verify C files using a predefined class of properties
+
+In the project that you want to verify, run:
+
+```
+$ lsverifier -r -f -p memory-leak-check,overflow-check,deadlock-check,data-races-check
+```
+
+See more properties on tool help.
+
+#### 6. LSVerifier help
 
 For more details, check the help:
 
