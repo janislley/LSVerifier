@@ -10,6 +10,13 @@ Preliminary findings were published in [SBSeg 2023](https://sbseg2023.ufjf.br/en
 
 Demo Video: https://www.youtube.com/watch?v=LrGwp00pSLc
 
+### Vulnerabilities uncovered:
+
+| Software | Solftware vulnerabilities | Fixes |
+|----------|---------------------------|-------|
+| RUFUS | Array bounds violations (CWE-119) | [Issue](https://github.com/pbatard/rufus/issues/1856) and [Fix](https://github.com/kokke/tiny-regex-c/pull/78) |
+| Wireshark | Dereference failures (CWE-416) | [Issue](https://gitlab.com/wireshark/wireshark/-/issues/17897) and [Fix](https://gitlab.com/wireshark/wireshark/-/merge_requests/6021) |
+
 ## Version
 
 | Version | Improviments |
