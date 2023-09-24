@@ -4,6 +4,12 @@ LSVerifier is a command-line tool for formal verification of large ANSI-C projec
 
 It leverages the [ESBMC](https://github.com/esbmc/esbmc) model checker as its core verification engine.
 
+## Achievements:
+
+Preliminary findings were published in [SBSeg 2023](https://sbseg2023.ufjf.br/en/home/): https://ssvlab.github.io/lucasccordeiro/papers/sbseg2023.pdf
+
+Demo Video: https://www.youtube.com/watch?v=LrGwp00pSLc
+
 ## Version
 
 | Version | Improviments |
