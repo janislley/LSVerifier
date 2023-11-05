@@ -4,25 +4,14 @@ LSVerifier is a command-line tool for formal verification of large ANSI-C projec
 
 It leverages the [ESBMC](https://github.com/esbmc/esbmc) model checker as its core verification engine.
 
-## Achievements:
-
-Preliminary findings were published in [SBSeg 2023](https://sbseg2023.ufjf.br/en/home/): https://ssvlab.github.io/lucasccordeiro/papers/sbseg2023.pdf
-
-Demo Video: https://www.youtube.com/watch?v=LrGwp00pSLc
-
-### Vulnerabilities uncovered:
-
-| Software | Solftware vulnerabilities | Fixes |
-|----------|---------------------------|-------|
-| RUFUS | Array bounds violations (CWE-119) | [Issue](https://github.com/pbatard/rufus/issues/1856) and [Fix](https://github.com/kokke/tiny-regex-c/pull/78) |
-| Wireshark | Dereference failures (CWE-416) | [Issue](https://gitlab.com/wireshark/wireshark/-/issues/17897) and [Fix](https://gitlab.com/wireshark/wireshark/-/merge_requests/6021) |
+Demo [video](https://www.youtube.com/watch?v=LrGwp00pSLc).
 
 ## Version
 
 | Version | Improviments |
 |---------|--------------|
-| v0.3.0  | Support specific class of property verification; Prioritized functions verification, Disable invalid pointer verification. |
-| v0.2.0  | Support for libraries dependencies; Recursive verification for large software. |
+| v0.3.0  | Support specific class of property verification; Support for large software; Prioritized functions verification, Disable invalid pointer verification. |
+| v0.2.0  | Support for libraries dependencies; Recursive verification. |
 
 ## Installation
 
