@@ -13,6 +13,10 @@ Demo [video](https://www.youtube.com/watch?v=LrGwp00pSLc).
 | v0.3.0  | Support specific class of property verification; Support for large software; Prioritized functions verification, Disable invalid pointer verification. |
 | v0.2.0  | Support for libraries dependencies; Recursive verification. |
 
+## Requirements
+
+[Ctags](https://github.com/universal-ctags/ctags) is required to use LSVerifier.
+
 ## Installation
 
 #### Install LSVerifier
