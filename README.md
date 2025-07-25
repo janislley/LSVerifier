@@ -14,15 +14,15 @@ Demo [video](https://www.youtube.com/watch?v=LrGwp00pSLc).
 
 The diagram below summarizes the LSVerifier verification workflow:
 
-![LSVerifier Architecture](docs/lsverifier_architecture.png)
+![LSVerifier Architecture](https://github.com/janislley/LSVerifier/blob/main/lsverifier/docs/lsverifier_architecture.png)
 
 **Workflow Steps:**
 
-1. **Input**: Project source code (C files)
-2. **Preprocessing**: Parses function listings and configures library dependencies (if any)
-3. **Function Prioritization** *(optional)*: Orders verification by risk/importance
-4. **Model Checking**: Each function is analyzed via **ESBMC**
-5. **Result Generation**: Logs and reports verification outcomes
+1. **Input**: Project source code (C files).
+2. **Preprocessing**: Parses function listings and configures library dependencies (if any).
+3. **Function Prioritization** *(optional)*: Orders verification by risk/importance.
+4. **Model Checking**: Each function is analyzed via **ESBMC**.
+5. **Result Generation**: Logs and reports verification outcomes.
 
 ## Version
 
