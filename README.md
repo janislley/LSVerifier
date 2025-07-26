@@ -1,4 +1,8 @@
-## LSVerifier
+# LSVerifier
+
+[![PyPI version](https://img.shields.io/pypi/v/lsverifier.svg)](https://pypi.org/project/lsverifier/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/)
 
 LSVerifier is a command-line tool for formal verification of large ANSI-C projects in a single run. 
 
@@ -6,10 +10,25 @@ It leverages the [ESBMC](https://github.com/esbmc/esbmc) model checker as its co
 
 Demo [video](https://www.youtube.com/watch?v=LrGwp00pSLc).
 
+## Architecture Overview
+
+The diagram below summarizes the LSVerifier verification workflow:
+
+![LSVerifier Architecture](docs/lsverifier_architecture.png)
+
+**Workflow Steps:**
+
+1. **Input**: Project source code (C files)
+2. **Preprocessing**: Parses function listings and configures library dependencies (if any)
+3. **Function Prioritization** *(optional)*: Orders verification by risk/importance
+4. **Model Checking**: Each function is analyzed via **ESBMC**
+5. **Result Generation**: Logs and reports verification outcomes
+
 ## Version
 
-| Version | Improviments |
+| Version | Improvements |
 |---------|--------------|
+| v0.4.0  | Support ESBMC v7.10, improved symbolic modeling of thread-local globals and data race detection, and introduced support for termination analysis to detect non-terminating loops in C programs. |
 | v0.3.0  | Support specific class of property verification; Support for large software; Prioritized functions verification, Disable invalid pointer verification. |
 | v0.2.0  | Support for libraries dependencies; Recursive verification. |
 
