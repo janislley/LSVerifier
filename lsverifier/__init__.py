@@ -76,6 +76,7 @@ def arguments():
     parser.add_argument("-d", "--directory", help="Set the directory to be verified", default=False)
     parser.add_argument("-dp", "--disable-pointer-check", help="Disable invalid pointer verification", action="store_true", default=False)
     parser.add_argument("-e", "--esbmc-parameter", help="Use ESBMC parameter")
+    parser.add_argument("-g", "--generate-compdb", action="store_true", help="Generate compile_commands.json for the project and exit")
 
     args = parser.parse_args()
 
@@ -94,6 +95,17 @@ def main():
 
     args = arguments()
     print("[LSVerifier] Loading configuration settings")
+
+    if args.generate_compdb:
+        project_dir = args.directory or os.getcwd()
+        compdb = utils.ensure_compdb(project_dir, getattr(args, "build_dir", "build"))
+        if compdb:
+            print(f"[LSVerifier] compile_commands.json at: {compdb}")
+            return 0
+        else:
+            print("[LSVerifier] Could not generate compile_commands.json. "
+                  "Ensure you have either CMake (with CMakeLists.txt) or Make+bear installed.")
+            return 1
 
     log_name = log.configure(args.verbose)
 
